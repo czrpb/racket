@@ -16,7 +16,7 @@ cat <<EOL > submit.sh
 #!/usr/bin/env bash
 
 set -x
-exercism submit lib/$file.rkt
+exercism submit $file.rkt
 EOL
 
 chmod 755 submit.sh
