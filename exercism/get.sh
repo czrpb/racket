@@ -10,7 +10,8 @@ mv -v racket/$1 .
 
 cd $1
 
-file="$(echo $1 | tr - _)"
+#file="$(echo $1 | tr - _)"
+file="$1"
 
 cat <<EOL > submit.sh
 #!/usr/bin/env bash
