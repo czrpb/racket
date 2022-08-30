@@ -5,7 +5,9 @@
 (provide classify)
 
 (define (factors n)
-  (let ([nums2n (range 1 (add1 (quotient n 2)))] [factor? (lambda (x) (zero? (remainder n x)))])
+  (let
+      ([nums2n (range 1 (add1 (quotient n 2)))]
+       [factor? (lambda (x) (zero? (remainder n x)))])
     (filter factor? nums2n)))
 
 (define sum (partial apply +))
