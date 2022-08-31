@@ -25,7 +25,7 @@
 
 (define (score word)
   (let* (
-        [string->downlist (compose string->list string-downcase)]
+        [string->downlist (compose in-string string-downcase)]
         [letters (string->downlist word)])
     (for/sum ([l letters]) (letter->score l)))
   )
