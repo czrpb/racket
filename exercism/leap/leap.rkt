@@ -9,9 +9,9 @@
          [div-by-100 (div-by 100)]
          [div-by-4 (div-by 4)]
          )
-    (match year
-      [(app div-by-400 #t) #t]
-      [(app div-by-100 #t) #f]
-      [(app div-by-4 #t) #t]
+    (cond
+      [(div-by-400 year) #t]
+      [(div-by-100 year) #f]
+      [(div-by-4 year) #t]
       [else #f]
       )))
