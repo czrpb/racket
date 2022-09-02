@@ -10,10 +10,6 @@
      (lambda (possible)
        (and (not (equal? word possible))
             (= (string-length word) (string-length possible))
-            (let ([possible-chars (string-sort possible)])
-              (for/and ([w word-chars] [p possible-chars])
-                (equal? w p)))))
+            (equal? word-chars (string-sort possible))))
      possibles
-     )
-    )
-  )
+     )))
