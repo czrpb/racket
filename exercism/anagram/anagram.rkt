@@ -4,7 +4,7 @@
 
 (define (anagrams-for word possibles)
   (let* ([string-downcase->list (compose string->list string-downcase)]
-         [string-sort (lambda (s) (sort (string-downcase->list s) char-ci<?))]
+         [string-sort (lambda (s) (sort (string-downcase->list s) char<?))]
          [word-chars (string-sort word)])
     (filter
      (lambda (possible)
