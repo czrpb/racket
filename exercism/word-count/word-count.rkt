@@ -3,7 +3,7 @@
 (provide word-count)
 
 (define (word-count phrase)
-  (let*([string-or-false (match-lambda ["" #f] [s s])]
+  (let ([string-or-false (match-lambda ["" #f] [s s])]
         [hash-update!-count
          (lambda (k h) (hash-update h k add1 0))]
         [string-trim-puncuation (lambda (s) (string-trim s #px"[-_'!@$%^&]+"))])
