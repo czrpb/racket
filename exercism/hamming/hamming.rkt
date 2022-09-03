@@ -15,3 +15,6 @@
 ;    (count (negate equal?)
 ;           (string->list str1)
 ;           (string->list str2)))
+
+;  count -> (length (filter-map ...))
+;  https://docs.racket-lang.org/reference/pairs.html#%28def._%28%28lib._racket%2Flist..rkt%29._count%29%29
