@@ -2,4 +2,9 @@
 (provide my-reverse)
 
 (define (my-reverse s)
-  (error "not implemented"))
+  (let ([
+         string-reverse
+         (compose list->string
+                  (compose reverse string->list))
+         ])
+    (string-reverse s)))
