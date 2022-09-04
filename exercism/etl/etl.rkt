@@ -5,7 +5,7 @@
 (define (etl old)
   (for*/hash ([(score letters) old]
               #:do [(or (nonnegative-integer? score)
-                        (raise (exn:fail:contract "Invalid score" (current-continuation-marks))))]
+                        (raise [exn:fail:contract "Invalid score" (current-continuation-marks)]))]
               [letter letters])
     (values (string-downcase letter) score)
     )
