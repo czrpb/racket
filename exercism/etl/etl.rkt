@@ -19,3 +19,16 @@
         (apply hash-union converted-hash)
         (hash))
     ))
+
+
+; Very cool community implementation:
+
+; (provide etl)
+
+; (define/contract (etl legacy-hash)
+;   ((hash/c natural-number/c (listof string?)) . -> . (hash/c string? natural-number/c))
+;   (for*/hash ([(key vs) (in-hash legacy-hash)]
+;               [v (in-list vs)])
+;     (values (string-downcase v) key)))
+
+; https://exercism.org/tracks/racket/exercises/etl/solutions/mthom
