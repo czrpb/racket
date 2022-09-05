@@ -3,7 +3,7 @@
 (provide collatz)
 
 (define (collatz n)
-  (if (or ((negate natural?) n) (zero? n))
+  (if (not (positive-integer? n))
       (error "Invalid input")
       (letrec ([1? (lambda (n) (= n 1))]
                [c+1 add1]
