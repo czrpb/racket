@@ -17,3 +17,12 @@
                   #:combine/key (lambda (k a b) a)])
      (lambda (p1 p2) (char-ci<? p1 p2)) #:key car
      )))
+
+; Nice solution from community:
+; https://exercism.org/tracks/racket/exercises/nucleotide-count/solutions/leafac
+; (define (nucleotide-counts dna)
+;   (foldl
+;    (λ (nucleotide counts)
+;      (dict-update counts nucleotide add1))
+;    '((#\A . 0) (#\C . 0) (#\G . 0) (#\T . 0))
+;    (string->list dna)))
