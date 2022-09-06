@@ -15,10 +15,11 @@
                   (samples->hash sequence)
                   all-nucleotides
                   #:combine/key (lambda (k a b) a)])
-     (lambda (p1 p2) (char-ci<? p1 p2)) #:key car
+     char-ci<? #:key car
      )))
 
-; Nice solution from community:
+; Nice solutions from community:
+
 ; https://exercism.org/tracks/racket/exercises/nucleotide-count/solutions/leafac
 ; (define (nucleotide-counts dna)
 ;   (foldl
@@ -26,3 +27,10 @@
 ;      (dict-update counts nucleotide add1))
 ;    '((#\A . 0) (#\C . 0) (#\G . 0) (#\T . 0))
 ;    (string->list dna)))
+
+; https://exercism.org/tracks/racket/exercises/nucleotide-count/solutions/cky
+; (define (nucleotide-counts str)
+;   (sort (hash->list (for/fold ([h #hasheqv((#\A . 0) (#\C . 0) (#\G . 0) (#\T . 0))])
+;                               ([c (in-string str)])
+;                       (hash-update h c add1)))
+;         char<? #:key car))
