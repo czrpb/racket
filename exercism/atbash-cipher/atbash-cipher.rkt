@@ -42,5 +42,8 @@
       ))
 
 (define (decode msg)
-  (process cipher (string-downcase msg) #f)
-  )
+  (~>
+   msg
+   string-downcase
+   (process cipher _ #f)
+   ))
