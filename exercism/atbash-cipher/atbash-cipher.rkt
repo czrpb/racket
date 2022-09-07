@@ -13,27 +13,32 @@
 (define (for/hash-from->to from to)
   (for/hash ([a from] [b to]) (values a b)))
 
-(define (translate trans-hash str)
-    (string-map (lambda (c) [hash-ref trans-hash c]) str))
+(define (process translation-hash msg bin?)
+  (list->string
+   (reverse
+    (car
+     (foldl (match-lambda**
+             [(char (cons result counter))
+              (let* ([translated-char (hash-ref translation-hash char #f)]
+                     [result-with?-space
+                      (if (and bin? translated-char (zero? counter))
+                          (cons #\  result) result)]
+                     [counter+1 (modulo (add1 counter) 5)]
+                     )
+                (if translated-char
+                    (cons (cons translated-char result-with?-space) counter+1)
+                    (cons result counter)
+                    ))])
+            (cons '() 5)
+            (string->list msg))
+     ))))
 
-(define (process msg from to)
-  (letrec ([~alnum #px"[^a-z0-9]"]
-           [string-remove-~alnum (lambda (s) [string-replace s ~alnum ""])]
-           [clean (compose string-remove-~alnum string-downcase)]
-           )
-    (translate (for/hash-from->to from to) (clean msg))
+(define (encode msg)
+  (let ([translation-hash (for/hash-from->to alphabet tebahpla)])
+    (process translation-hash (string-downcase msg) #t)
     ))
 
-(define (encode m)
-  (letrec ([first-^5 (lambda (s) [if (< (string-length s) 5) (string-length s) 5])]
-           [string-bin (lambda (s) [let ([avail (first-^5 s)])
-                                     (cons (string-drop s avail) (string-take s avail))])]
-           [bin (match-lambda** [("" binned) binned]
-                                [(s binned) (match-let ([(cons a b) (string-bin s)])
-                                              (bin a (string-append binned " " b)))])]
-           )
-    (string-trim (bin (process m alphabet tebahpla) ""))
+(define (decode msg)
+  (let ([translation-hash (for/hash-from->to alphabet tebahpla)])
+    (process translation-hash (string-downcase msg) #f)
     ))
-
-(define (decode m)
-  (process m tebahpla alphabet))
