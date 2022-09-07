@@ -23,8 +23,7 @@
                      [result-with?-space
                       (if (and bin? translated-char (zero? counter))
                           (cons #\  result) result)]
-                     [counter+1 (modulo (add1 counter) 5)]
-                     )
+                     [counter+1 (modulo (add1 counter) 5)])
                 (if translated-char
                     (cons (cons translated-char result-with?-space) counter+1)
                     (cons result counter)
