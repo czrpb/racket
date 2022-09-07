@@ -11,8 +11,8 @@
 (define alphabet (string-append letters numbers))
 (define tebahpla (string-append (string-reverse letters) numbers))
 
-(define (for/hash-from->to from to)
-  (for/hash ([a from] [b to]) (values a b)))
+(define cipher
+  (for/hash ([a alphabet] [b tebahpla]) (values a b)))
 
 (define (process translation-hash msg bin?)
   (~>
@@ -33,11 +33,9 @@
   )
 
 (define (encode msg)
-  (let ([translation-hash (for/hash-from->to alphabet tebahpla)])
-    (process translation-hash (string-downcase msg) #t)
-    ))
+  (process cipher (string-downcase msg) #t)
+  )
 
 (define (decode msg)
-  (let ([translation-hash (for/hash-from->to alphabet tebahpla)])
-    (process translation-hash (string-downcase msg) #f)
-    ))
+  (process cipher (string-downcase msg) #f)
+  )
