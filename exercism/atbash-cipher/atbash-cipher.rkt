@@ -15,7 +15,10 @@
   (for/hash ([a alphabet] [b tebahpla]) (values a b)))
 
 (define (process translation-hash msg bin?)
-  (~>
+  (~> ; like Elixir's |>
+      ; 1st expression is sent to the 2nd argument which is a function
+      ; whose output is sent to the next function and onward
+      ; https://docs.racket-lang.org/threading/index.html#%28form._%28%28lib._threading%2Fmain..rkt%29._~7e~3e%29%29|
    (foldl (match-lambda**
            [(char (cons result counter))
             (let* ([translated-char (hash-ref translation-hash char #f)]
@@ -33,8 +36,10 @@
   )
 
 (define (encode msg)
-  (process cipher (string-downcase msg) #t)
-  )
+  (~> msg
+      string-downcase
+      (process cipher _ #t)
+      ))
 
 (define (decode msg)
   (process cipher (string-downcase msg) #f)
