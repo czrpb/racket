@@ -35,10 +35,10 @@
    car reverse list->string)
   )
 
-(define (code msg direction)
+(define (code msg bin?)
   (~> msg
       string-downcase
-      (process cipher _ direction)
+      (process cipher _ bin?)
       ))
 
 (define (encode msg)
