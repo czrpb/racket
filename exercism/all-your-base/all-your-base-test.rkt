@@ -69,8 +69,8 @@
       (test-exn "negative-digit" exn:fail:contract?
                    (lambda () (rebase '( 1 -1 1 0 1 0 ) 2 10)))
 
-      (test-false "invalid-positive-digit"
-                   (rebase '( 1 2 1 0 1 0 ) 2 10))
+      (test-exn "invalid-positive-digit" exn:fail:contract?
+                   (lambda () (rebase '( 1 2 1 0 1 0 ) 2 10)))
 
       (test-exn "output-base-is-one" exn:fail:contract?
                    (lambda () (rebase '( 1 0 1 0 1 0 ) 2 1)))
