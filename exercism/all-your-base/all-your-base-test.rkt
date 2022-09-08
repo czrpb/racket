@@ -57,31 +57,31 @@
                    '( 4 2 )
                    (rebase '( 0 6 0 ) 7 10))
 
-      (test-false "input-base-is-one"
-                   (rebase '( 0 ) 1 10))
+      (test-exn "input-base-is-one" exn:fail:contract?
+                   (lambda () (rebase '( 0 ) 1 10)))
 
-      (test-false "input-base-is-zero"
-                   (rebase '() 0 10))
+      (test-exn "input-base-is-zero" exn:fail:contract?
+                   (lambda () (rebase '() 0 10)))
 
-      (test-false "input-base-is-negative"
-                   (rebase '( 1 ) -2 10))
+      (test-exn "input-base-is-negative" exn:fail:contract?
+                   (lambda () (rebase '( 1 ) -2 10)))
 
-      (test-false "negative-digit"
-                   (rebase '( 1 -1 1 0 1 0 ) 2 10))
+      (test-exn "negative-digit" exn:fail:contract?
+                   (lambda () (rebase '( 1 -1 1 0 1 0 ) 2 10)))
 
       (test-false "invalid-positive-digit"
                    (rebase '( 1 2 1 0 1 0 ) 2 10))
 
-      (test-false "output-base-is-one"
-                   (rebase '( 1 0 1 0 1 0 ) 2 1))
+      (test-exn "output-base-is-one" exn:fail:contract?
+                   (lambda () (rebase '( 1 0 1 0 1 0 ) 2 1)))
 
-      (test-false "output-base-is-zero"
-                   (rebase '( 7 ) 10 0))
+      (test-exn "output-base-is-zero" exn:fail:contract?
+                   (lambda () (rebase '( 7 ) 10 0)))
 
-      (test-false "output-base-is-negative"
-                   (rebase '( 1 ) 2 -7))
+      (test-exn "output-base-is-negative" exn:fail:contract?
+                   (lambda () (rebase '( 1 ) 2 -7)))
 
-      (test-false "both-bases-are-negative"
-                   (rebase '( 1 ) -2 -7))))
+      (test-exn "both-bases-are-negative" exn:fail:contract?
+                   (lambda () (rebase '( 1 ) -2 -7)))))
 
     (run-tests suite))
