@@ -4,7 +4,7 @@
 
 (define (matching? str)
   (let* ([open->closed? (lambda (close-char expected-open)
-                          ;  (printf "\t~a : ~a\n" close-char expected-open)
+                          ;(printf "\t~a : ~a\n" close-char expected-open)
                           (match (~a close-char)
                             [")" (equal? expected-open "(")]
                             ["]" (equal? expected-open "[")]
@@ -47,4 +47,6 @@
 (matching? "{[}")
 (matching? "(]")
 (matching? "(1]")
+(matching? "{}[1")
+(matching? "{}[()")
 (printf "\n")
