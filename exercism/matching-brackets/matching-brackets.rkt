@@ -25,7 +25,7 @@
 
     ))
 
-(printf "Expect 9 #t\n")
+(printf "Expect 10 #t\n")
 (matching? "")
 (matching? "[]")
 (matching? "{}")
@@ -33,14 +33,18 @@
 (matching? "([{}])")
 (matching? "()[]{}")
 (matching? "123")
+(matching? "[1]")
 (matching? "(((185 + 223.85) * 15) - 543)/2")
 (matching? "([{}({}[])])")
 (printf "\n")
 
-(printf "Expect 5 #f\n")
+(printf "Expect 8 #f\n")
 (matching? "][")
 (matching? ")(")
 (matching? "}{")
 (matching? "{}[")
 (matching? "{[}")
+(matching? "{[}")
+(matching? "(]")
+(matching? "(1]")
 (printf "\n")
