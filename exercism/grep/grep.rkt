@@ -9,13 +9,18 @@
          [format-result (compose join-with-lf reverse)]
          [nats (in-naturals)]
          [lines (in-lines (open-input-file file #:mode 'text))]
-         [contains (lambda (line) (string-contains? line str))])
+         [matches? (compose
+                    (if (member "-v" flags) string-contains? (negate string-contains?))
+                    (if (member "-i" flags)
+                        (lambda (line str) (values (string-downcase line) (string-downcase str)))
+                        (lambda (line str) (values line str)))
+                    )]
+         )
     (format-result
      (for/fold ([result '()]) ([nat nats] [line lines])
-       (if (contains line)
-           (let* ([add-line-num (member "-n" flags)]
-                  [line (if add-line-num
-                            (~a nat ":" line) line)])
+       (if (matches? line str)
+           (let* ([line (if (member "-n" flags) (~a nat ":" line) line)]
+                  )
              (cons line result))
            result)
        ))
