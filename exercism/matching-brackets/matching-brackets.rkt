@@ -7,8 +7,7 @@
                           (match (~a close-char)
                             [")" (equal? expected-open "(")]
                             ["]" (equal? expected-open "[")]
-                            ["}" (equal? expected-open "{")]
-                            [_ #t]))]
+                            ["}" (equal? expected-open "{")]))]
 
          [m? (lambda (c a)
                (case (~a c)
