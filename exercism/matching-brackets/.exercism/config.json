@@ -1,0 +1,19 @@
+{
+  "blurb": "Calculate the number of grains of wheat on a chessboard given that the number on each square doubles.",
+  "authors": [
+    "czrpb"
+  ],
+  "files": {
+    "solution": [
+      "matching-brackets.rkt"
+    ],
+    "test": [
+      "matching-brackets.rkt"
+    ],
+    "example": [
+      ".meta/example.rkt"
+    ]
+  },
+  "source": "Exercism's Elixir Exercise",
+  "source_url": "https://exercism.org/tracks/elixir/exercises/matching-brackets"
+}
