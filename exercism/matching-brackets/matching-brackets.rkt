@@ -1,10 +1,9 @@
 #lang racket
 
-(provide matching?)
+(provide balanced?)
 
-(define (matching? str)
+(define (balanced? str)
   (let* ([open->closed? (lambda (close-char expected-open)
-                          ;(printf "\t~a : ~a\n" close-char expected-open)
                           (match (~a close-char)
                             [")" (equal? expected-open "(")]
                             ["]" (equal? expected-open "[")]
@@ -12,7 +11,6 @@
                             [_ #t]))]
 
          [m? (lambda (c a)
-               ;(printf ">> ~a : ~a\n" c a)
                (case (~a c)
                  [("(" "[" "{") (cons (~a c) a)]
                  [(")" "]" "}") (match a
@@ -24,29 +22,3 @@
     (equal? (foldl m? '() (string->list str)) '())
 
     ))
-
-(printf "Expect 10 #t\n")
-(matching? "")
-(matching? "[]")
-(matching? "{}")
-(matching? "()")
-(matching? "([{}])")
-(matching? "()[]{}")
-(matching? "123")
-(matching? "[1]")
-(matching? "(((185 + 223.85) * 15) - 543)/2")
-(matching? "([{}({}[])])")
-(printf "\n")
-
-(printf "Expect 8 #f\n")
-(matching? "][")
-(matching? ")(")
-(matching? "}{")
-(matching? "{}[")
-(matching? "{[}")
-(matching? "{[}")
-(matching? "(]")
-(matching? "(1]")
-(matching? "{}[1")
-(matching? "{}[()")
-(printf "\n")
