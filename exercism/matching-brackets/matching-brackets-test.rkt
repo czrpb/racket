@@ -13,6 +13,7 @@
      (test-eqv? "empty is balenced" (balanced? "") #t)
      (test-eqv? "'[]' is balenced" (balanced? "[]") #t)
      (test-eqv? "'{}' is balenced" (balanced? "{}") #t)
+     (test-eqv? "'{ }' is balenced" (balanced? "{ }") #t)
      (test-eqv? "'()' is balenced" (balanced? "()") #t)
 
      ; Complicated passing tests
@@ -24,8 +25,8 @@
      (test-eqv? "'123' is balenced" (balanced? "123") #t)
      (test-eqv? "'[1]' is balenced" (balanced? "[1]") #t)
      (test-eqv? "'(((185 + 223.85) * 15) - 543)/2' is balenced" (balanced? "(((185 + 223.85) * 15) - 543)/2") #t)
-     (test-eqv? "'a{b}c(d)e[f]g' is balenced" (balanced? "[1]") #t)
-     (test-eqv? "'a{b(c[de]f)g}h' is balenced" (balanced? "[1]") #t)
+     (test-eqv? "'a{b}c(d)e[f]g' is balenced" (balanced? "a{b}c(d)e[f]g") #t)
+     (test-eqv? "'a{b(c[de]f)g}h' is balenced" (balanced? "a{b(c[de]f)g}h") #t)
 
      ; Simple failing tests
      (test-eqv? "'][' is UN-balenced" (balanced? "][") #f)
@@ -33,13 +34,15 @@
      (test-eqv? "'}{' is UN-balenced" (balanced? "}{") #f)
      (test-eqv? "'(]' is UN-balenced" (balanced? "(]") #f)
      (test-eqv? "']]' is UN-balenced" (balanced? "][") #f)
-     (test-eqv? "'((' is UN-balenced" (balanced? "][") #f)
+     (test-eqv? "'((' is UN-balenced" (balanced? "((") #f)
 
      ; Complicated failing tests
      (test-eqv? "'{}[' is UN-balenced" (balanced? "{}[") #f)
      (test-eqv? "'[}]' is UN-balenced" (balanced? "[}]") #f)
      (test-eqv? "'{[}' is UN-balenced" (balanced? "{[}") #f)
+     (test-eqv? "'{[])' is UN-balenced" (balanced? "{[])") #f)
      (test-eqv? "'{}[()' is UN-balenced" (balanced? "{}[()") #f)
+     (test-eqv? "'{[)][]}' is UN-balenced" (balanced? "{[)][]}") #f)
 
      ; Additional characters but unbalenced
      (test-eqv? "'(1]' is UN-balenced" (balanced? "(1]") #f)
