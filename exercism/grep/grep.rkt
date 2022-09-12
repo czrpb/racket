@@ -10,7 +10,7 @@
          [nats (in-naturals)]
          [lines (in-lines (open-input-file file #:mode 'text))]
          [matches? (compose
-                    (if (member "-v" flags) string-contains? (negate string-contains?))
+                    (if (member "-v" flags) (negate string-contains?) string-contains?)
                     (if (member "-i" flags)
                         (lambda (line str) (values (string-downcase line) (string-downcase str)))
                         (lambda (line str) (values line str)))
@@ -27,4 +27,4 @@
 
     ))
 
-(grep '("-n") "and" "iliad.txt")
+(grep '("-n" "-i") "and" "iliad.txt")
