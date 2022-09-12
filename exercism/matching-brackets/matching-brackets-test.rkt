@@ -30,6 +30,8 @@
      (test-eqv? "')(' is UN-balenced" (balanced? ")(") #f)
      (test-eqv? "'}{' is UN-balenced" (balanced? "}{") #f)
      (test-eqv? "'(]' is UN-balenced" (balanced? "(]") #f)
+     (test-eqv? "']]' is UN-balenced" (balanced? "][") #f)
+     (test-eqv? "'((' is UN-balenced" (balanced? "][") #f)
 
      ; Complicated failing tests
      (test-eqv? "'{}[' is UN-balenced" (balanced? "{}[") #f)
@@ -38,8 +40,8 @@
      (test-eqv? "'{}[()' is UN-balenced" (balanced? "{}[()") #f)
 
      ; Additional characters but unbalenced
-     (test-eqv? "'(]' is UN-balenced" (balanced? "(1]") #f)
-     (test-eqv? "'(]' is UN-balenced" (balanced? "{}[1") #f)
+     (test-eqv? "'(1]' is UN-balenced" (balanced? "(1]") #f)
+     (test-eqv? "'{}[1' is UN-balenced" (balanced? "{}[1") #f)
 
      ))
 

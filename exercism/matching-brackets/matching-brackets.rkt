@@ -13,9 +13,9 @@
          [m? (lambda (c a)
                (case (~a c)
                  [("(" "[" "{") (cons (~a c) a)]
-                 [(")" "]" "}") (match a
-                                  ['() #f]
-                                  [_ (if (open->closed? c (car a)) (cdr a) #f)])]
+                 [(")" "]" "}") (case a
+                                  [(() #f) #f]
+                                  [else (if (open->closed? c (car a)) (cdr a) #f)])]
                  [else a])
                )])
 
