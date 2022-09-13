@@ -2,26 +2,6 @@
 
 (provide balanced?)
 
-(define (balanced2? str)
-  (let* ([open->closed? (lambda (close-char expected-open)
-                          (match (~a close-char)
-                            [")" (equal? expected-open "(")]
-                            ["]" (equal? expected-open "[")]
-                            ["}" (equal? expected-open "{")]))]
-
-         [m? (lambda (c a)
-               (case (~a c)
-                 [("(" "[" "{") (cons (~a c) a)]
-                 [(")" "]" "}") (case a
-                                  [(() #f) #f]
-                                  [else (if (open->closed? c (car a)) (cdr a) #f)])]
-                 [else a])
-               )])
-
-    (equal? (foldl m? '() (string->list str)) '())
-
-    ))
-
 (define open-brackets (set "(" "[" "{"))
 (define close-brackets (set ")" "]" "}"))
 (define is-open-bracket? (lambda (c) (set-member? open-brackets c)))
