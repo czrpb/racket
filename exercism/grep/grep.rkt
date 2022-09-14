@@ -13,23 +13,24 @@
                         (lambda (line str) (values line str)))
                     )]
          )
-    (flatten
-     (map (lambda (file)
-            (reverse
-             (for/fold ([result '()]) ([nat nats] [line (lines file)])
-               (if (matches? line str)
-                   (let* ([update-line-flags
-                           (compose
-                            (lambda (line)
-                              [if (and (member "-l" flags) (or (empty? result) (not (equal? file (car result)))))
-                                  file line])
-                            (lambda (line)
-                              [if (> (length files) 1) (~a file ":" line) line])
-                            (lambda (line)
-                              [if (member "-n" flags) (~a nat ":" line) line])
-                            )])
-                     (cons (update-line-flags line) result))
-                   result)
-               )))
-          files)
-     )))
+    (remove-duplicates
+     (flatten
+      (map (lambda (file)
+             (reverse
+              (for/fold ([result '()]) ([nat nats] [line (lines file)])
+                (if (matches? line str)
+                    (let* ([update-line-flags
+                            (compose
+                             (lambda (line)
+                               ;(printf "~a | ~a | ~a\n" file flags result)
+                               [if (member "-l" flags) file line])
+                             (lambda (line)
+                               [if (> (length files) 1) (~a file ":" line) line])
+                             (lambda (line)
+                               [if (member "-n" flags) (~a nat ":" line) line])
+                             )])
+                      (cons (update-line-flags line) result))
+                    result)
+                )))
+           files)
+      ))))
