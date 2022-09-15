@@ -17,19 +17,22 @@ value should be inserted.
 
 Example 1:
 
-> List of values: `("A" "C" "E")`
->
-> List of tuples: `(("B" 1) ("D" 3))`
-> 
-> Expected output: `(("B" 1) ("D" 3))`
+```
+  List of values: `("A" "C" "E")`
+  List of tuples: `(("B" 1) ("D" 3))`
+
+  Expected output: `(("B" 1) ("D" 3))`
+```
 
 Example 2:
 
-> List of values: `(1 2 3 4 5 6 7 8 9 10)`
->
-> List of tuples: `(("A" 1) ("B" 3) ("C" 6))`
-> 
-> Expected output: `(1 "A" 2 3 "B" 4 5 6 "C" 7 8 9 10)`
+```
+  List of values: `(1 2 3 4 5 6 7 8 9 10)`
+  List of tuples: `(("A" 1) ("B" 3) ("C" 6))`
+
+  Expected output: `(1 "A" 2 3 "B" 4 5 6 "C" 7 8 9 10)`
+``` 
+
 
 ## Indexes are Relative to the Resultant List
 
