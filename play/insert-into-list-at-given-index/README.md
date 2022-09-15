@@ -21,7 +21,7 @@ Example 1:
   List of values:   ("A" "C" "E")
   List of tuples:   (("B" 1) ("D" 3))
 
-  Expected output:  (("B" 1) ("D" 3))
+  Expected output:  ("A" "B" "C" "E")
 ```
 
 Example 2:
