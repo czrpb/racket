@@ -9,8 +9,8 @@
 ;   Replace repeated tokens with their offset from the beginning of the stream
 ;   Write out the list as a string
 
-(define (lz77 str)
-  (let* ([str-list (string-split str)]
+(define (lz77-encode str)
+  (let* ([str-list (string-split (string-downcase str) #px"[^a-z]+")]
          [locations (make-hash)]
 
          [process (lambda (token acc)
@@ -30,11 +30,19 @@
                           (+ curr-pos (string-length token) 1))]
                         )))]
          )
-
     (car (foldl process (cons #""  1) str-list))
-
     ))
 
-(lz77 "a b c")                       ; <-- "a b c"
-(lz77 "the the the")                 ; <-- "the \0 \0"
-(lz77 "a b a b c b a b a b a a")     ; <-- "a b \1 \3 c \3 \1 \3 \1 \3 \1 \1"
+(define test1 "a b c")
+(lz77-encode test1)                 ; <-- "a b c"
+
+(define test2 "the the the")
+(lz77-encode test2)                 ; <-- "the \0 \0"
+
+(define test3 "a b a b c b a b a b a a")
+(lz77-encode test3)                 ; <-- "a b \1 \3 c \3 \1 \3 \1 \3 \1 \1"
+
+(define test4 "this is a test to see if the test will work as a good test or if the test will not work as a test")
+(lz77-encode test4)
+
+;(lz77 "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aliquam sed posuere nulla. Maecenas laoreet, libero ut ultricies faucibus, metus sem volutpat neque, ut euismod felis lorem eu tellus. Nam vestibulum blandit justo, in congue lectus. Aenean maximus, mauris ac malesuada venenatis, dui purus dignissim erat, vel pharetra turpis ipsum eu mauris. Nullam id est turpis. Quisque dignissim mi vel nunc semper, sollicitudin viverra ligula vehicula. Sed cursus efficitur ante, ac vestibulum arcu viverra at. Vestibulum quis sagittis purus.")
