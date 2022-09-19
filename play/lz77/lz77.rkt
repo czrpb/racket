@@ -1,5 +1,7 @@
 #lang racket
 
+(require srfi/13)
+
 ; See the followings for a description of the LZ77:
 ;   https://www.infinitepartitions.com/art001.html
 ;   https://en.wikipedia.org/wiki/LZ77_and_LZ78
@@ -33,16 +35,48 @@
     (car (foldl process (cons #""  1) str-list))
     ))
 
+(define (list-split l v)
+  (reverse
+   (map reverse
+        (for/fold ([acc '(())]) ([e l])
+          (case (equal? v e)
+            [(#f) (cons (cons e (car acc)) (cdr acc))]
+            [(#t) (cons '() acc)]
+            )))))
+
+(define (lz77-decode bites)
+  (let ([snacks (cdr (list-split (bytes->list bites) 32))])
+    (for/fold ([acc ""]) ([snack snacks])
+      (for/fold ([acc (~a acc " ")]) ([bite snack])
+        ;(printf "[~a] : ~a | ~a\n" acc snack bite)
+        (~a acc
+            (if (< bite 65)
+                (substring acc bite (string-index acc #\  bite))
+                (integer->char bite))
+            )
+        ))
+    ))
+
 (define test1 "a b c")
+test1
 (lz77-encode test1)                 ; <-- "a b c"
+(lz77-decode (lz77-encode test1))
+(displayln "")
 
 (define test2 "the the the")
+test2
 (lz77-encode test2)                 ; <-- "the \0 \0"
+(lz77-decode (lz77-encode test2))
+(displayln "")
 
 (define test3 "a b a b c b a b a b a a")
+test3
 (lz77-encode test3)                 ; <-- "a b \1 \3 c \3 \1 \3 \1 \3 \1 \1"
+(lz77-decode (lz77-encode test3))
+(displayln "")
 
 (define test4 "this is a test to see if the test will work as a good test or if the test will not work as a test")
 (lz77-encode test4)
+(displayln "")
 
 ;(lz77 "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aliquam sed posuere nulla. Maecenas laoreet, libero ut ultricies faucibus, metus sem volutpat neque, ut euismod felis lorem eu tellus. Nam vestibulum blandit justo, in congue lectus. Aenean maximus, mauris ac malesuada venenatis, dui purus dignissim erat, vel pharetra turpis ipsum eu mauris. Nullam id est turpis. Quisque dignissim mi vel nunc semper, sollicitudin viverra ligula vehicula. Sed cursus efficitur ante, ac vestibulum arcu viverra at. Vestibulum quis sagittis purus.")
