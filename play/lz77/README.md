@@ -8,9 +8,9 @@ Fundamentally, LZ77/78 compression works by:
 > 
 >   https://en.wikipedia.org/wiki/LZ77_and_LZ78
 
-Here will by more on this algorithm in Racket/Scheme. The goal is more to learn
-Racket/Scheme than the algorithm. The choice of algorithm is that it is something
-non-trivial vs the many trivial problems available online.
+Here will by my implementation of this algorithm in Racket/Scheme. The goal is
+more to learn Racket/Scheme than the algorithm. The choice of algorithm is that
+it is something non-trivial vs the many trivial problems available online.
 
 (This said, things like Advent Of Code and Exercism are much better than other
 sites like l33tcode so ...)
