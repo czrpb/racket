@@ -1,14 +1,15 @@
 #lang racket
 
-(require srfi/13)
+(require (only-in srfi/13 string-index))
 
 ; See the followings for a description of the LZ77:
 ;   https://www.infinitepartitions.com/art001.html
 ;   https://en.wikipedia.org/wiki/LZ77_and_LZ78
 
 ; Here we will do a very basic version of it:
-;   Tokenize on spaces
+;   Tokenize on space+
 ;   Replace repeated tokens with their offset from the beginning of the stream
+;     The offset will be just 1byte and thus the offset can maximally be 255.
 ;   Write out the list as a string
 
 (define (lz77-encode str)
@@ -50,33 +51,48 @@
       (for/fold ([acc (~a acc " ")]) ([bite snack])
         ;(printf "[~a] : ~a | ~a\n" acc snack bite)
         (~a acc
-            (if (< bite 65)
+            (if (= 1 (length snack))
                 (substring acc bite (string-index acc #\  bite))
                 (integer->char bite))
             )
         ))
     ))
 
-(define test1 "a b c")
-test1
-(lz77-encode test1)                 ; <-- "a b c"
-(lz77-decode (lz77-encode test1))
-(displayln "")
+(define (gen-text n)
+  (let* ([gen-new-word (lambda () [build-string (random 3 7) (lambda (_) [integer->char (random 97 123)])])]
+         [gen-word (lambda (text) [if (zero? (random 4))
+                                      (vector-ref text (random (vector-length text)))
+                                      (gen-new-word)
+                                      ])]
+         )
+    (for/fold ([acc (vector (gen-new-word))]) ([_ (in-range n)])
+      (vector-append acc (vector (gen-word acc)))
+      )
+    ))
 
-(define test2 "the the the")
-test2
-(lz77-encode test2)                 ; <-- "the \0 \0"
-(lz77-decode (lz77-encode test2))
-(displayln "")
+(define tests
+  (build-list 40
+              (lambda (n) [string-join
+                           (shuffle
+                            (vector->list
+                             (gen-text (add1 n)))) " "])
+              ))
+;tests
 
-(define test3 "a b a b c b a b a b a a")
-test3
-(lz77-encode test3)                 ; <-- "a b \1 \3 c \3 \1 \3 \1 \3 \1 \1"
-(lz77-decode (lz77-encode test3))
-(displayln "")
+(define tests-encoded (map lz77-encode tests))
+;tests-encoded
 
-(define test4 "this is a test to see if the test will work as a good test or if the test will not work as a test")
-(lz77-encode test4)
-(displayln "")
+(define tests-decoded (map lz77-decode tests-encoded))
 
-;(lz77 "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aliquam sed posuere nulla. Maecenas laoreet, libero ut ultricies faucibus, metus sem volutpat neque, ut euismod felis lorem eu tellus. Nam vestibulum blandit justo, in congue lectus. Aenean maximus, mauris ac malesuada venenatis, dui purus dignissim erat, vel pharetra turpis ipsum eu mauris. Nullam id est turpis. Quisque dignissim mi vel nunc semper, sollicitudin viverra ligula vehicula. Sed cursus efficitur ante, ac vestibulum arcu viverra at. Vestibulum quis sagittis purus.")
+
+(map (lambda (l) [printf "~v\n\n" l])
+     (filter-map (match-lambda
+                   [(list l1 l2 l3) (let* ([s1 (string-length l1)]
+                                           [s2 (bytes-length l2)]
+                                           [%-diff (/ (exact->inexact s2) s1)])
+                                      (and (< %-diff 0.8)
+                                           (list l1 s1 l2 s2 %-diff l3 (equal? l1 (string-trim l3))))
+                                      )])
+                 (map list tests tests-encoded tests-decoded)
+                 )
+     )
