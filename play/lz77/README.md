@@ -21,7 +21,17 @@ In the 1st implementation, I am constraining the solution by:
 
 1. Words are random characters of length 2 to 6 of just a-z.
 1. No puncuation, so not really sentences or paragraphs.
-1. The text to be compressed are limited to a total of 255 bytes,
+1. The text to be compressed is limited to a total of 255 bytes,
    including the spaces between "words".
 
 The "back reference" is thus just 1 byte as an offset from the beginning of the text.
+
+### Encoding
+
+The algorithm is:
+
+```text
+For each word:
+  If we have see the word before write it offset as a byte into the output stream,
+  otherwise save the word in our current dictionary with the current offset.
+```
