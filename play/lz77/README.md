@@ -31,9 +31,9 @@ The "back reference" is thus just 1 byte as an offset from the beginning of the 
 Only expand this AFTER you have worked on your own algorithm.
 
 <details><summary>The algorithm is:
-```text
+<code>
 For each word:
   If we have see the word before write it offset as a byte into the output stream,
   otherwise save the word in our current dictionary with the current offset.
-```
+</code>
 </details>
