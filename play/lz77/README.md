@@ -15,7 +15,7 @@ it is something non-trivial vs the many trivial problems available online.
 (This said, things like Advent Of Code and Exercism are much better than other
 sites like l33tcode so ...)
 
-## LZ77 Mini
+## Nano-LZ77 
 
 In the 1st implementation, I am constraining the solution by:
 
