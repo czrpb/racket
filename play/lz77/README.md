@@ -34,8 +34,9 @@ Only expand this AFTER you have worked on your own algorithm.
 
 <pre>
 For each word:
-  If we have see the word before write it offset as a byte into the output stream,
-  otherwise save the word in our current dictionary with the current offset.
+  If we have seen the word before write its offset as a byte into the output stream,
+  otherwise write the word to the output stream and save the word in our current
+  dictionary with the current offset.
 </pre>
 
 </details>
