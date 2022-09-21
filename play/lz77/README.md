@@ -39,6 +39,6 @@ For each word:
   dictionary with the current offset.
 </pre>
 
-Implementation here: <a href="/play/lz77/nano/lz77.rkt">/play/lz77/nano/lz77.rkt</a>
+Implementation here: <a href="/play/lz77/nano/lz77.rkt">nano/lz77.rkt</a>
 
 </details>
