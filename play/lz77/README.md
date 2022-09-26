@@ -24,7 +24,7 @@ In the 1st implementation, I am constraining the solution by:
 1. The text to be compressed is limited to a total of 255 bytes,
    including the spaces between "words".
 
-The "back reference" is thus just 1 byte as an offset from the beginning of the text.
+The *reference* is thus just 1 byte as an *offset* from the beginning of the text.
 
 ### Encoding
 
@@ -47,10 +47,12 @@ Implementation here: <a href="/play/lz77/nano/lz77.rkt">nano/lz77.rkt</a>
 
 In this implementation, constraints are eased:
 
-1. Words are still random letter of a-z, and now 1 to 8 in length.
+1. Words are still random letters of a-z, and now 1 to 8 in length.
 1. Simulated sentences of length 4 - 10 words, and a `,` every now and then.
-1. No text length limit, but "back reference" is still 1byte and thus is not an offset
-   but distance backwards in the stream.
+1. No text length limit.
+
+Thus, the *reference* is still 1byte and is not an offset but distance *backwards*
+in the stream, thus a *back reference*.
 
 ### Encoding
 
