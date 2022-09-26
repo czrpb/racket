@@ -48,15 +48,12 @@
 (define (lz77-decode bites)
   (let ([snacks (cdr (list-split (bytes->list bites) 32))])
     (for/fold ([acc ""]) ([snack snacks])
-      (for/fold ([acc (~a acc " ")]) ([bite snack])
-        ;(printf "[~a] : ~a | ~a\n" acc snack bite)
-        (~a acc
-            (if (= 1 (length snack))
-                (substring acc bite (string-index acc #\  bite))
-                (integer->char bite))
-            )
-        ))
-    ))
+      (let ([acc (string-append acc " ")])
+        (~a acc (if (= 1 (length snack))
+                (substring acc (car snack) (string-index acc #\  (car snack)))
+                (bytes->string/latin-1 (apply bytes snack))
+                )))
+      )))
 
 (define (gen-text n)
   (let* ([gen-new-word (lambda () [build-string (random 3 7) (lambda (_) [integer->char (random 97 123)])])]
