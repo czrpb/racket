@@ -47,7 +47,7 @@ Implementation here: <a href="/play/lz77/nano/lz77.rkt">nano/lz77.rkt</a>
 
 In this implementation, constraints are eased:
 
-1. Still random, but 1 to 8 in length, still a-z.
+1. Words are still random letter of a-z, and now 1 to 8 in length.
 1. Simulated sentences of length 4 - 10 words, and a `,` every now and then.
 1. No text length limit, but "back reference" is still 1byte and thus is not an offset
    but distance backwards in the stream.
