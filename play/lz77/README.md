@@ -15,7 +15,7 @@ it is something non-trivial vs the many trivial problems available online.
 (This said, things like Advent Of Code and Exercism are much better than other
 sites like l33tcode so ...)
 
-## Nano-LZ77 
+## Nano LZ77 
 
 In the 1st implementation, I am constraining the solution by:
 
@@ -42,3 +42,15 @@ For each word:
 Implementation here: <a href="/play/lz77/nano/lz77.rkt">nano/lz77.rkt</a>
 
 </details>
+
+## Micro LZ77
+
+In this implementation, constraints are eased:
+
+1. Still random, but 1 to 8 in length, still a-z.
+1. Simulated sentences of length 4 - 10 words, and a `,` every now and then.
+1. No text length limit, but "back reference" is still 1byte and thus is not an offset
+   but distance backwards in the stream.
+
+### Encoding
+
