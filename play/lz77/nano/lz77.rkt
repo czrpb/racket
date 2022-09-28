@@ -18,16 +18,13 @@
 
          [process (lambda (token acc)
                     (let ([result (car acc)] [curr-pos (cdr acc)])
-                      ;(printf "[~a] : ~a\n" result curr-pos)
                       (match (hash-ref locations token 'not-found)
                         ['not-found
-                         ;(printf "\t(~a) : ~a\n" token curr-pos)
                          (hash-set! locations token curr-pos)
                          (cons
                           (bytes-append result #" " (string->bytes/latin-1 token))
                           (+ curr-pos (string-length token) 1))]
                         [loc
-                         ;(printf "\t<~a> : ~a\n" token loc)
                          (cons
                           (bytes-append result #" " (bytes loc))
                           (+ curr-pos (string-length token) 1))]
