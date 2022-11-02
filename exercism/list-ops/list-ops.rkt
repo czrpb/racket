@@ -9,11 +9,12 @@
          my-concatenate)
 
 (define (my-length sequence)
-  (letrec [(len (match-lambda**
-                 [('() l) l]
-                 [(sequence l) (len (cdr sequence) (add1 l))]
-                 ))]
-    (len sequence 0)
+  (let [(len 0)]
+    (do
+        [(sequence sequence (cdr sequence))]
+      [(empty? sequence) len]
+      (set! len (add1 len))
+      )
     ))
 
 (define (my-reverse sequence)
@@ -30,7 +31,13 @@
     ))
 
 (define (my-filter operation? sequence)
-  (error "Not implemented yet"))
+  (let loop [(sequence sequence) (new-sequence '())]
+    (if [empty? sequence]
+        (reverse new-sequence)
+        (loop (cdr sequence) (if (operation? (car sequence))
+                                 (cons (car sequence) new-sequence)
+                                 new-sequence))
+        )))
 
 (define (my-fold operation accumulator sequence)
   (error "Not implemented yet"))

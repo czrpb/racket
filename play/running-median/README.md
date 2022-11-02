@@ -18,6 +18,8 @@ https://docs.racket-lang.org/math/stats.html#%28def._%28%28lib._math%2Fstatistic
 > the element that would be at index `(ceiling (- (* p n) 1))` if `xs` were
 > sorted, where `n` is the length of `xs`.
 
+NOTE: `p` is the quintile and thus a fraction.
+
 Which means we cant get the above list and instead get:
 
 ```text
