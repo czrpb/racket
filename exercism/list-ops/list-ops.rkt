@@ -40,10 +40,26 @@
         )))
 
 (define (my-fold operation accumulator sequence)
-  (error "Not implemented yet"))
+  (letrec
+      [
+       (op (λ (item acc) (operation item acc)))
+       (loop (λ (accumulator sequence)
+               (if (empty? sequence)
+                   accumulator
+                   (loop (op (car sequence) accumulator) (cdr sequence)))))
+       ]
+    (loop accumulator sequence)
+    ))
 
 (define (my-append sequence1 sequence2)
-  (error "Not implemented yet"))
+  (let loop [(sequence1 (reverse sequence1)) (new-sequence sequence2)]
+    (if (empty? sequence1)
+        new-sequence
+        [loop (cdr sequence1) (cons (car sequence1) new-sequence)]
+        )))
 
 (define (my-concatenate sequence-of-sequences)
-  (error "Not implemented yet"))
+  (if [empty? sequence-of-sequences]
+      '()
+      (my-fold my-append '() (reverse sequence-of-sequences))
+      ))
