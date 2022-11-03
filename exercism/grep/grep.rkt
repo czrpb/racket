@@ -23,19 +23,18 @@
          [str-match? (if with-inverted (negate regexp-match) regexp-match)]
 
          ; Setup the display logic
-         [format-line (if with-file-names-only
-                          (lambda (file _ _2) file)
-                          (lambda (file line nat)
-                            [cond
-                              [(and multiple-files with-linenum) (~a file ":" nat ":" line)]
-                              [multiple-files (~a file ":" line)]
-                              [with-linenum (~a nat ":" line)]
-                              [#t line]]))]
+         [format-line (cond
+                        [with-file-names-only (λ (file _line _nat) file)]
+                        [(and multiple-files with-linenum) (λ (file line nat) (~a file ":" nat ":" line))]
+                        [multiple-files (λ (file line _nat) (~a file ":" line))]
+                        [with-linenum (λ (_file line nat) (~a nat ":" line))]
+                        [#t (λ (_file line _nat) line)])]
 
          ; Setup our sequences
          [nats (in-naturals 1)]
-         [lines (lambda (file) (in-lines (open-input-file file #:mode 'text)))]
+         [lines (λ (file) (in-lines (open-input-file file #:mode 'text)))]
          )
+
     (reverse
      (remove-duplicates
       (for/fold ([acc '()]) ([file files])
