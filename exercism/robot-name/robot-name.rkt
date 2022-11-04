@@ -5,14 +5,26 @@
          reset!
          reset-name-cache!)
 
+
+(define (make-name)
+  (let [
+        (random-letter (λ () (integer->char (random 65 90))))
+        (random-number (λ () (random 10)))
+        ]
+    (~a (random-letter) (random-letter) (random-number) (random-number) (random-number))
+    ))
+
 (define (make-robot)
-  (error "Not implemented yet"))
+  (make-name))
 
 (define (name robot)
-  (error "Not implemented yet"))
+  (case robot
+    [("") (make-robot)]
+    [else robot]
+    ))
 
 (define (reset! robot)
-  (error "Not implemented yet"))
+  "")
 
 (define (reset-name-cache!)
-  (error "Not implemented yet"))
+  "")
