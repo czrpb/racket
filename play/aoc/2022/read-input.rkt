@@ -4,7 +4,7 @@
 
 (define (read-input inputfile)
   (let* [(fh (open-input-file inputfile #:mode 'text))
-         (lines (in-lines fh))
+         (lines (for/list [(line (in-lines fh))] line))
          ]
     (cons lines fh)
     ))
