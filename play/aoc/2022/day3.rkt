@@ -85,6 +85,7 @@
       (displayln intersections)
       (displayln (apply + sums))
       )
+      
     (close-input-port fh)
     )
   )
