@@ -34,6 +34,7 @@
                           (map make-section (string-split line ","))))
          (sections->sets (partial map (partial apply set)))
 
+         ; sets operations
          (sets-subset? (λ (sets)
                          (or
                           (apply subset? sets)
