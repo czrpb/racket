@@ -33,14 +33,22 @@
 ;       [_ (cons (cons n 1) acc)]
 ;       )))
 
+; (define (rle l)
+;   (let loop [(l (cdr l)) (v (car l)) (c 1) (acc '())]
+;     (cond
+;       [(empty? l) (reverse (cons (cons v c) acc))]
+;       [(equal? (car l) v) (loop (cdr l) v (add1 c) acc)]
+;       [true (loop (cdr l) (car l) 1 (cons (cons v c) acc))]
+;       )
+;     )
+;   )
+
 (define (rle l)
-  (let loop [(l (cdr l)) (v (car l)) (c 1) (acc '())]
-    (cond
-      [(empty? l) (reverse (cons (cons v c) acc))]
-      [(equal? (car l) v) (loop (cdr l) v (add1 c) acc)]
-      [true (loop (cdr l) (car l) 1 (cons (cons v c) acc))]
-      )
-    )
+  (define/match (rle_ l c acc)
+    [((list a) c acc) (reverse (cons (cons a c) acc))]
+    [((list* a a t) c acc) (rle_ (cons a t) (add1 c) acc)]
+    [((list* a t) c acc) (rle_ t 1 (cons (cons a c) acc))])
+  (rle_ l 1 '())
   )
 
 (define test1 '(1 2 2 2 3 4 4 5 6 6 6 6))
