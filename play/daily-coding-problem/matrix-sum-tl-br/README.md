@@ -67,7 +67,7 @@ After talking thru the brute force, attempting to just walk via diagonals wont c
 
 ### Graphs
 
-#### Ajacentency Matrix
+#### Adjacentency Matrix
 
 |    | C1 | C2 | C3 |
 |:--:|:--:|:--:|:--:|
