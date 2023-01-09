@@ -75,17 +75,17 @@ After talking thru the brute force, attempting to just walk via diagonals wont c
 | R2 | 4  | 5  | 6  |
 | R3 | 7  | 8  | 9  |
 
-#### Nodes
+#### Nodes: `9`
 
 R1C1, R1C2, R1C3
 R2C1, R2C2, R2C3
 R3C1, R3C2, R3C3
 
 
-#### Edges
+#### Edges: `12`
 
 (R1C1, R1C2, 1)
-(R1C1, R2C1, 4)
+(R1C1, R2C1, 1)
 
 (R1C2, R1C3, 2)
 (R1C2, R2C2, 2)
@@ -120,7 +120,7 @@ R3C1, R3C2, R3C3
 (R3C1) -7-> (R3C2) -8-> (R3C3)
 ```
 
-#### Paths
+#### Paths: `6`
 
 ```
 R1C1 -1-> R1C2 -2-> R1C3 -3-> R2C3 -6-> R3C3
