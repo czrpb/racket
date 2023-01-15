@@ -40,5 +40,18 @@ What is is my pace (`??min mile`)?
 
 #### Show Your Work!
 
-Pace: `0.33km / 1:15`.
+1. Pace: `0.333km / 1:15min`
+1. Convert distance and time: `0.207mile / 75sec`
+   * `0.333km` -> `0.207mile`
+   * `1:15min` -> `75sec`
+1. `0.207mile` is `1/4.831mile`
+1. Pace: `1mile / 6:02min`
+   * How long to run a mile? `4.831 * 75` seconds
+   * `1mile / 362.325sec`
+   * then convert seconds to minutes
+
+Answer: About a `6min mile`!
+
+#### In Words
+
 
