@@ -36,7 +36,7 @@ Well, given the above conversion of `1mile -> 1.609` I ran `1.609`
 kilometers in 10minutes.
 
 Another example: Say I run a third of a kilometer in 1 and a quarter minutes.
-What is is my pace (`_X_ min mile`)?
+What is is my pace (`??min mile`)?
 
 #### Show Your Work!
 
