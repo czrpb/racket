@@ -9,24 +9,30 @@
       (lines (get-lines "day7-input-example.txt"))
       (process-line (match-lambda**
 
-                     [(dir-sums (regexp #rx"[$] cd (.+)" (list _ rest)))
-                      (displayln (cons rest dir-sums))
-                      (cons 0 dir-sums)]
+                     [((cons curr-path dir-sums) "$ cd ..")
+                      (cons (cdr curr-path) dir-sums)
+                      ]
 
-                     [(dir-sums (regexp #px"^\\d+" (list size)))
-                      (displayln size)
-                      (map (λ (s) (+ s (string->number size))) dir-sums)
+                     [((cons curr-path dir-sums) (regexp #rx"[$] cd (.+)" (list _ dir-name)))
+                      (cons (cons dir-name curr-path)
+                            (hash-set dir-sums (cons dir-name curr-path) 0))
+                      ]
+
+                     [((cons curr-path dir-sums) (regexp #px"^\\d+" (list size)))
+                      (cons curr-path
+                            (hash-update dir-sums curr-path
+                                         (λ (v) (+ (string->number size) v))))
                       ]
 
                      [(dir-sums line) dir-sums]
                      ))
       ]
   (let loop [
-             (dir-sums '())
+             (dir-sums (cons '() (hash)))
              (lines lines)
              ]
     (if (empty? lines)
-        dir-sums
+        (cdr dir-sums)
         (loop (process-line dir-sums (car lines)) (cdr lines))
         )
     ))
