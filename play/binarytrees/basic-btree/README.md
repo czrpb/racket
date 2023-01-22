@@ -26,6 +26,17 @@ flowchart BT
   id3(Item) --> id6(Item)
 ```
 
+But, since we are used to reading top-to-bottom we draw them this way:
+
+```mermaid
+flowchart BT
+  id1(Item) --> id2(Item) & id3(Item)
+  id2(Item) --> id4(Item) & id5(Item)
+  id3(Item) --> id6(Item)
+```
+
+(To me this evokes a tree/plant root system.)
+
 ## Details
 
 ### Definitions
