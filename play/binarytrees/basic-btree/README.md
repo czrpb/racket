@@ -1,9 +1,16 @@
 # Basic Binary Tree
 
 A `Tree` data strucuture is a method of structuring the relationship between
-one item and another of your data based on some function.
+your data based on some function.
 
-To understand this, lets start with what this means for a `List`. In a `List` the relationship between the items is: f
+To understand this, lets start with what this means for a `List`. In a `List` the relationship between the data is "linear" or "ordered"; meaning 
+
+Concretely:
+
+```mermaid
+flowchart LR
+   Item1 --> Item2 --> Item3 -->
+```
 
 ## Why Use Them?
 
