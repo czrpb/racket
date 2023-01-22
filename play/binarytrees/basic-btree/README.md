@@ -22,8 +22,8 @@ Obviously, the name `Tree` is meant to evoke a visual, something like:
 ```mermaid
 flowchart BT
   id1(Item) --> id2(Item) & id3(Item)
-  id2(Item) --> id3(Item) & id4(Item)
-  id3(Item) --> id5(Item)
+  id2(Item) --> id4(Item) & id5(Item)
+  id3(Item) --> id6(Item)
 ```
 
 ## Details
