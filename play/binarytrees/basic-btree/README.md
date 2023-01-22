@@ -39,9 +39,3 @@ flowchart TB
 ```scheme
 (define Tree '(data tree tree ...))
 ```
-
-```scheme
-```
-
-```scheme
-```
