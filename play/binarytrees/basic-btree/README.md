@@ -41,9 +41,12 @@ flowchart TB
 
 ### Definitions
 
-* `Tree`: A collection of `Data` and `Child` `Tree`s starting at a `Root`
-* `Root`: A `Tree` that is not a `Child` of another `Tree`
-* `Child`: A `Tree` that is not a `Root`
+* `Node`: A collection of `Data` and `Child` `Tree`s
+* `Tree`: A collection of `Node`s starting with a `Root` `Node`
+* `Root` (`Node`): A `Node` that is not a `Child` of another `Node`
+  * It is the "starting" `Node` for using a `Tree`
+* `Child` (`Node`): A `Node` that is not a `Root` `Node`
+  * It is a `Node` somewhere in the `Tree`
 * `Data`: Any sort of data type you desire.
   > NOTE: Usually your data must be `???`
 
