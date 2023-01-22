@@ -28,7 +28,7 @@ A `Tree` contains `Data` and (sub)`Tree`s
 #### Visually
 
 ```mermaid
-flowchar TB
+flowchart TB
   Root --> Child1 & Child2
   Child1 --> Child1_Child1 & Child1_Child2
   Child2 --> Child2_Child
