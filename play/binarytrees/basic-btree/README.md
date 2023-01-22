@@ -9,7 +9,7 @@ Concretely:
 
 ```mermaid
 flowchart LR
-   Item1 --> Item2 --> Item3 --> rest(...)
+   id1(Item) --> id2(Item) --> id3(Item) --> rest(...)
 ```
 
 ## Why Use Them?
