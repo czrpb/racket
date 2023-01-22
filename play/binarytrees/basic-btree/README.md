@@ -29,7 +29,7 @@ flowchart BT
 But, since we are used to reading top-to-bottom we draw them this way:
 
 ```mermaid
-flowchart BT
+flowchart TB
   id1(Item) --> id2(Item) & id3(Item)
   id2(Item) --> id4(Item) & id5(Item)
   id3(Item) --> id6(Item)
