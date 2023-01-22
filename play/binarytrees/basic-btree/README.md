@@ -3,7 +3,8 @@
 A `Tree` data strucuture is a method of structuring the relationship between
 your data based on some function.
 
-To understand this, lets start with what this means for a `List`. In a `List` the relationship between the data is "linear" or "ordered"; meaning 
+### A `List`
+To understand this, lets start with what this means for a `List`. In a `List` the relationship between the data is "linear" or "ordered"; meaning an item is related to the next or remaining based on when it was added to the structure.
 
 Concretely:
 
@@ -12,9 +13,18 @@ flowchart LR
    id1(Item) --> id2(Item) --> id3(Item) --> rest(...)
 ```
 
-## Why Use Them?
+### A `Tree`
 
-asdf
+Ok, so in a `Tree` data is related based on some given function. This means when adding or search, the traversal of the structure consults a function on which "path" to take.
+
+Obviously, the name `Tree` is meant to evoke a visual, something like:
+
+```mermaid
+flowchart BT
+  id1(Item) --> id2(Item) & id3(Item)
+  id2(Item) --> id3(Item) & id4(Item)
+  id3(Item) --> id5(Item)
+```
 
 ## Details
 
@@ -32,7 +42,7 @@ asdf
 
 A `Tree` contains `Data` and (sub)`Tree`s
 
-#### Visually
+#### Visual
 
 ```mermaid
 flowchart TB
