@@ -37,6 +37,12 @@ flowchart TB
 
 (To me this evokes a tree/plant root system.)
 
+## Motivation
+
+A `Tree` is a much more efficient data structure when searched. This is because a search occurs along a branch or path from the root, ignore the data on other branches and thus is never compared with.
+
+
+
 ## Details
 
 ### Definitions
@@ -56,7 +62,9 @@ flowchart TB
 
 A `Tree` is a collection of `Node`s which themselves are `Data` and (references/pointers) to other `Node`s.
 
+A `Tree` starts at a _root_ node and one searches for data in the `Tree` by traversing (or decending) based on some function that chooses which _branches_ to continue on.
 
+It is here that a `Tree` becomes a powerful data structure: When choosing which branch (or path) to decend greatly removes the amount of data than is compared.
 
 #### Visual
 

@@ -1,16 +1,17 @@
 #lang racket
 
-(define make-tree (λ (value [left '()] [right '()])
-                    (list value left right)
+(define make-tree (λ (value [left '()] [right '()] [count 1])
+                    (list (cons value count) left right)
                     ))
 
 (define (tree-add tree value)
   (if (empty? tree)
       (make-tree value)
-      (match-let [((list curr-value left right) tree)]
+      (match-let [((list (cons curr-value count) left right) tree)]
         (cond
-          [(< value curr-value) (make-tree curr-value (tree-add left value) right)]
-          [(> value curr-value) (make-tree curr-value left (tree-add right value))]
+          [(< value curr-value) (make-tree curr-value (tree-add left value) right count)]
+          [(> value curr-value) (make-tree curr-value left (tree-add right value) count)]
+          [(equal? curr-value value) (make-tree curr-value left right (add1 count))]
           [else tree]
           ))
       ))
@@ -18,8 +19,8 @@
 (define (dfs tree)
   (if (empty? tree)
       '()
-      (match-let [((list value left right) tree)]
-        (flatten (filter-not empty? (list (dfs left) value (dfs right))))
+      (match-let [((list (cons value count) left right) tree)]
+        (flatten (filter-not empty? (list (dfs left) (build-list count (λ (_) value)) (dfs right))))
         )
       )
   )
@@ -28,14 +29,14 @@
   (let loop [(trees trees) (acc '())]
     (if (empty? trees)
         (reverse acc)
-        (let* [
+        (match-let* [
                (tree (car trees))
-               (value (car tree))
+               ((cons value count) (car tree))
                (children (filter-not empty? (cdr tree)))
 
                (trees (filter-not empty? (cdr trees)))
                ]
-          (loop (append trees children) (cons value acc))
+          (loop (append trees children) (append (build-list count (λ (_) value)) acc))
           )
         )
     )
@@ -55,7 +56,7 @@
 'na
 )
 
-(define rand-nums (take (shuffle (range 128)) 32))
+(define rand-nums (build-list 32 (λ (_) (random 16))))
 
 (define tree
   (let [(nums rand-nums)]
