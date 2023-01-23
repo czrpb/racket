@@ -54,7 +54,9 @@ flowchart TB
 
 #### English
 
-A `Tree` contains `Data` and (sub)`Tree`s
+A `Tree` is a collection of `Node`s which themselves are `Data` and (references/pointers) to other `Node`s.
+
+
 
 #### Visual
 
