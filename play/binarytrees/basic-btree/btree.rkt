@@ -81,5 +81,5 @@
 (displayln "\nBFS:")
 (displayln (bfs (list tree)))
 
-(displayln "\nDepth:")
-(displayln (tree-depth tree))
+(displayln "\nDepth/MinDepth:")
+(printf "~a/~a\n" (tree-depth tree) (exact-ceiling (log (length rand-nums) 2)))
