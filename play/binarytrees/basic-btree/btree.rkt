@@ -56,7 +56,7 @@
 'na
 )
 
-(define rand-nums (build-list 32 (λ (_) (random 16))))
+(define rand-nums [build-list 32 (λ (_) (random 16))])
 
 (define tree
   (let [(nums rand-nums)]
