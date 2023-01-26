@@ -16,26 +16,50 @@
           ))
       ))
 
-(define (dfs tree)
+(define (tree->dfs tree)
   (if (empty? tree)
       '()
       (match-let [((list (cons value count) left right) tree)]
-        (flatten (filter-not empty? (list (dfs left) (build-list count (λ (_) value)) (dfs right))))
+        (flatten (filter-not empty? (list (tree->dfs left) (build-list count (λ (_) value)) (tree->dfs right))))
         )
       )
   )
 
-(define (bfs trees)
+(define (tree->paths tree path)
+  (match-let* [((list (cons value count) left right) tree)
+               (path (cons value path))
+               (subtrees (filter-not empty? (list left right)))
+               ]
+    (if (and (empty? left) (empty? right))
+        (reverse path)
+        (map (λ (subtree) (tree->paths subtree path)) subtrees)
+        )
+    )
+  )
+
+(displayln "\nDFS w/ paths:")
+(define test-tree [for/fold ((t '())) ((n '(4 2 6 1 3 5 7))) (tree-add t n)])
+(displayln test-tree)
+(displayln (tree->paths test-tree '()))
+(define test-tree-2 [for/fold ((t '())) ((n '(4 2 6 1 5 7))) (tree-add t n)])
+(displayln test-tree-2)
+(displayln (tree->paths test-tree-2 '()))
+(define test-tree-3 [for/fold ((t '())) ((n '(1 3 6 9 12 5))) (tree-add t n)])
+(displayln test-tree-3)
+(displayln (tree->paths test-tree-3 '()))
+(/ 1 0)
+
+(define (tree->bfs trees)
   (let loop [(trees trees) (acc '())]
     (if (empty? trees)
         (reverse acc)
         (match-let* [
-               (tree (car trees))
-               ((cons value count) (car tree))
-               (children (filter-not empty? (cdr tree)))
+                     (tree (car trees))
+                     ((cons value count) (car tree))
+                     (children (filter-not empty? (cdr tree)))
 
-               (trees (filter-not empty? (cdr trees)))
-               ]
+                     (trees (filter-not empty? (cdr trees)))
+                     ]
           (loop (append trees children) (append (build-list count (λ (_) value)) acc))
           )
         )
@@ -53,8 +77,8 @@
   )
 
 (define (tree-contains tree value)
-'na
-)
+  'na
+  )
 
 (define rand-nums [build-list 32 (λ (_) (random 16))])
 
@@ -76,10 +100,10 @@
 (pretty-display tree)
 
 (displayln "\nDFS:")
-(displayln (dfs tree))
+(displayln (tree->dfs tree))
 
 (displayln "\nBFS:")
-(displayln (bfs (list tree)))
+(displayln (tree->bfs (list tree)))
 
 (displayln "\nDepth/MinDepth:")
 (printf "~a/~a\n" (tree-depth tree) (exact-ceiling (log (length rand-nums) 2)))
