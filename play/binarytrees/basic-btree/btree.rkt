@@ -1,5 +1,7 @@
 #lang racket
 
+(require relation/function)
+
 (define make-tree (λ (value [left '()] [right '()] [count 1])
                     (list (cons value count) left right)
                     ))
@@ -37,17 +39,69 @@
     )
   )
 
+(define (tree->paths2 tree path)
+  (match tree
+    [(list (cons value _) '() '())
+     (list (reverse (cons value path)))]
+    [(list (cons value _) left '())
+     (tree->paths2 left (cons value path))]
+    [(list (cons value _) '() right)
+     (tree->paths2 right (cons value path))]
+    [(list (cons value _) left right)
+     (list (tree->paths2 left (cons value path)) (tree->paths2 right (cons value path)))]
+    )
+  )
+
+(define (tree->paths3 tree)
+  (match tree
+    ['() (list '())]
+    [(list (cons value _) '() '())
+     (list (list value))]
+    [(list (cons value _) left right)
+     (map (partial cons value) (filter-not empty? (append (tree->paths3 left) (tree->paths3 right))))]
+    )
+  )
+
 (displayln "\nDFS w/ paths:")
+
+(define test-tree-4 [for/fold ((t '())) ((n '(42))) (tree-add t n)])
+(displayln test-tree-4)
+(displayln (tree->paths test-tree-4 '()))
+(displayln (tree->paths3 test-tree-4))
+
+(define test-tree-5 [for/fold ((t '())) ((n '(42 7))) (tree-add t n)])
+(displayln test-tree-5)
+(displayln (tree->paths test-tree-5 '()))
+(displayln (tree->paths3 test-tree-5))
+
+(define test-tree-6 [for/fold ((t '())) ((n '(42 49))) (tree-add t n)])
+(displayln test-tree-6)
+(displayln (tree->paths test-tree-6 '()))
+(displayln (tree->paths3 test-tree-6))
+
+(define test-tree-7 [for/fold ((t '())) ((n '(42 7 49))) (tree-add t n)])
+(displayln test-tree-7)
+(displayln (tree->paths test-tree-7 '()))
+(displayln (tree->paths3 test-tree-7))
+
 (define test-tree [for/fold ((t '())) ((n '(4 2 6 1 3 5 7))) (tree-add t n)])
 (displayln test-tree)
 (displayln (tree->paths test-tree '()))
+(displayln (tree->paths3 test-tree))
+
+(/ 1 0)
+
 (define test-tree-2 [for/fold ((t '())) ((n '(4 2 6 1 5 7))) (tree-add t n)])
 (displayln test-tree-2)
-(displayln (tree->paths test-tree-2 '()))
-(define test-tree-3 [for/fold ((t '())) ((n '(1 3 6 9 12 5))) (tree-add t n)])
+(displayln (tree->paths3 test-tree-2))
+
+(define test-tree-3 [for/fold ((t '())) ((n '(1 3 6 9 12))) (tree-add t n)])
 (displayln test-tree-3)
-(displayln (tree->paths test-tree-3 '()))
-(/ 1 0)
+(displayln (tree->paths3 test-tree-3))
+
+(define test-tree-8 [for/fold ((t '())) ((n '(1 3 6 9 12 5))) (tree-add t n)])
+(displayln test-tree-8)
+(displayln (tree->paths3 test-tree-8))
 
 (define (tree->bfs trees)
   (let loop [(trees trees) (acc '())]
@@ -104,6 +158,9 @@
 
 (displayln "\nBFS:")
 (displayln (tree->bfs (list tree)))
+
+(displayln "\nPaths:")
+(displayln (tree->paths3 tree))
 
 (displayln "\nDepth/MinDepth:")
 (printf "~a/~a\n" (tree-depth tree) (exact-ceiling (log (length rand-nums) 2)))
