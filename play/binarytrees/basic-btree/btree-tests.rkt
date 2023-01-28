@@ -24,6 +24,16 @@
 (displayln "\nDFS:")
 (displayln (tree->dfs tree))
 
+(displayln "\nBFS:")
+(displayln (tree->bfs (list tree)))
+
+(displayln "\nPaths:")
+(displayln (tree->paths tree))
+
+(displayln "\nDepth/MinDepth:")
+(printf "~a/~a\n" (tree-depth tree) (exact-ceiling (log (length rand-nums) 2)))
+
+(displayln "\n")
 (displayln "\nDFS w/ paths:")
 
 (define test-tree-4 [for/fold ((t '())) ((n '(42))) (tree-add t n)])
@@ -57,12 +67,3 @@
 (define test-tree-8 [for/fold ((t '())) ((n '(1 3 6 9 12 5))) (tree-add t n)])
 (displayln test-tree-8)
 (displayln (tree->paths test-tree-8))
-
-(displayln "\nBFS:")
-(displayln (tree->bfs (list tree)))
-
-(displayln "\nPaths:")
-(displayln (tree->paths tree))
-
-(displayln "\nDepth/MinDepth:")
-(printf "~a/~a\n" (tree-depth tree) (exact-ceiling (log (length rand-nums) 2)))

@@ -2,18 +2,20 @@
 
 (require relation/function)
 
-(define make-tree (λ (value [left '()] [right '()] [count 1])
+(provide (all-defined-out))
+
+(define make-node (λ (value [left '()] [right '()] [count 1])
                     (list (cons value count) left right)
                     ))
 
 (define (tree-add tree value)
   (if (empty? tree)
-      (make-tree value)
+      (make-node value)
       (match-let [((list (cons curr-value count) left right) tree)]
         (cond
-          [(< value curr-value) (make-tree curr-value (tree-add left value) right count)]
-          [(> value curr-value) (make-tree curr-value left (tree-add right value) count)]
-          [(equal? curr-value value) (make-tree curr-value left right (add1 count))]
+          [(< value curr-value) (make-node curr-value (tree-add left value) right count)]
+          [(> value curr-value) (make-node curr-value left (tree-add right value) count)]
+          [(equal? curr-value value) (make-node curr-value left right (add1 count))]
           [else tree]
           ))
       ))
@@ -81,6 +83,6 @@
       )
   )
 
-(define (tree-contains tree value)
+(define (tree-contains? tree value)
   'na
   )
