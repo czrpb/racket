@@ -31,14 +31,14 @@
 ; PR fields we care about
 (define field-regexs
   (hash
-   "ref" (regexp "^(FOO-\\d+)")
-   "title" (regexp "^(FOO-\\d+): .+$")
-   "body" (regexp "# SECTION 1\\r\\n# SECTION 2")
+   'ref (regexp "^(FOO-\\d+)")
+   'title (regexp "^(FOO-\\d+): .+$")
+   'body (regexp "# TITLE\r?\n\r?\n.*# JIRA ID")
    ))
 
 (define (response->fields resp)
   (values
-   (hash-ref resp 'ref)
+   (hash-ref (hash-ref resp 'head) 'ref)
    (hash-ref resp 'title)
    (hash-ref resp 'body)
    ))
@@ -50,12 +50,25 @@
       (http-sendrecv/url url-gh/pr #:headers (list (make-header/token (token))))
       )
      ((resp) (read-json port))
-    ;  ((ref title body) (response->fields resp))
-    ;  ((ref-valid) (regexp-match (hash-ref field-regexs ref)))
+     ((ref title body) (response->fields resp))
      ]
-  (displayln (url->string url-gh/pr))
-  (displayln status-line)
-  (displayln headers)
-  (pretty-display resp)
-  ; (displayln (~a "\n" ref " : " ref-valid))
+  (printf "Successfully got and parsed PR: ~a\n\n" (pr))
+
+  (let [(ref-valid (regexp-match (hash-ref field-regexs 'ref) ref))]
+    (printf "\t~aBranch~aconforms to regex.\n"
+            (if ref-valid "   " "!!! ")
+            (if ref-valid " " " does not ")
+    ))
+
+  (let [(title-valid (regexp-match (hash-ref field-regexs 'title) title))]
+    (printf "\t~aTitle~aconforms to regex.\n"
+            (if title-valid "    " "!!! ")
+            (if title-valid " " " does not ")
+    ))
+
+  (let [(body-valid (regexp-match (hash-ref field-regexs 'body) body))]
+    (printf "\t~aBody~aconforms to regex.\n"
+            (if body-valid "    " "!!! ")
+            (if body-valid " " " does not ")
+    ))
   )
