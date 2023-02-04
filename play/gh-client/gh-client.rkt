@@ -6,7 +6,8 @@
 (define user (make-parameter #f))
 (define repo (make-parameter #f))
 (define pr (make-parameter #f))
-(define token "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")
+(define token (make-parameter #f))
+;(define token "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")
 (define header-token (~a "Authorization: token " token))
 
 (define (make-url-gh/pr user repo pr)
@@ -19,6 +20,7 @@
    [("-u" "--user") u "User that owns the repo" (user u)]
    [("-r" "--repo") r "Repo to get PRs for" (repo r)]
    [("-n" "--pr") n "PR to get" (pr n)]
+   [("-t" "--token") n "Token to access repo" (token t)]
    ))
 
 (let*-values
@@ -30,5 +32,5 @@
   (displayln (url->string url-gh/pr))
   (displayln status-line)
   (displayln headers)
-  (displayln resp)
+  (pretty-display resp)
   )
