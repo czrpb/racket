@@ -7,7 +7,6 @@
 (define repo (make-parameter #f))
 (define pr (make-parameter #f))
 (define token (make-parameter #f))
-;(define token "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")
 
 (define (make-url-gh/pr user repo pr)
   (string->url (format "https://api.github.com/repos/~a/~a/pulls/~a" user repo pr))
@@ -30,7 +29,7 @@
     [
      ((url-gh/pr) (make-url-gh/pr (user) (repo) (pr)))
      ((status-line headers port)
-      (http-sendrecv/url url-gh/pr #:headers (list (make-header/token token)))
+      (http-sendrecv/url url-gh/pr #:headers (list (make-header/token (token))))
       )
      ((resp) (read-json port))
      ]
