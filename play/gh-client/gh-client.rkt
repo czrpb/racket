@@ -1,6 +1,6 @@
 #lang racket
 
-(require net/url)
+(require net/http-client)
 (require json)
 
 ; Parameters
@@ -11,11 +11,12 @@
 
 ; URL request helpers
 (define (make-url-gh/pr user repo pr)
-  (string->url (format "https://api.github.com/repos/~a/~a/pulls/~a" user repo pr))
+  ; (format "https://api.github.com/repos/~a/~a/pulls/~a" user repo pr)
+  (values "api.github.com" (format "/repos/~a/~a/pulls/~a" user repo pr))
   )
 
 (define (make-header/token token)
-  (~a "Authorization: token " token)
+  (~a "Authorization: Bearer " token)
   )
 
 ; parse command-line
@@ -45,9 +46,9 @@
 
 (let*-values
     [
-     ((url-gh/pr) (make-url-gh/pr (user) (repo) (pr)))
+     ((host-gh url-pr) (make-url-gh/pr (user) (repo) (pr)))
      ((status-line headers port)
-      (http-sendrecv/url url-gh/pr #:headers (list (make-header/token (token))))
+      (http-sendrecv host-gh url-pr #:ssl? #t #:headers (list (make-header/token (token))))
       )
      ((resp) (read-json port))
      ((ref title body) (response->fields resp))
@@ -55,20 +56,20 @@
   (printf "Successfully got and parsed PR: ~a\n\n" (pr))
 
   (let [(ref-valid (regexp-match (hash-ref field-regexs 'ref) ref))]
-    (printf "\t~aBranch~aconforms to regex.\n"
+    (printf "\t~aBranch~aconforms to expected pattern.\n"
             (if ref-valid "   " "!!! ")
             (if ref-valid " " " does not ")
-    ))
+            ))
 
   (let [(title-valid (regexp-match (hash-ref field-regexs 'title) title))]
-    (printf "\t~aTitle~aconforms to regex.\n"
+    (printf "\t~aTitle~aconforms to expected pattern.\n"
             (if title-valid "    " "!!! ")
             (if title-valid " " " does not ")
-    ))
+            ))
 
   (let [(body-valid (regexp-match (hash-ref field-regexs 'body) body))]
-    (printf "\t~aBody~aconforms to regex.\n"
+    (printf "\t~aBody~aconforms to expected pattern.\n"
             (if body-valid "    " "!!! ")
             (if body-valid " " " does not ")
-    ))
+            ))
   )
