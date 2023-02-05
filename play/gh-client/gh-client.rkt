@@ -32,9 +32,9 @@
 ; PR fields we care about
 (define field-regexs
   (hash
-   'ref (regexp "^(FOO-\\d+)")
-   'title (regexp "^(FOO-\\d+): .+$")
-   'body (regexp "# TITLE\r?\n\r?\n.*# JIRA ID")
+   'ref #px"^(FOO-\\d+)"
+   'title #px"^(FOO-\\d+): .+$"
+   'body #px"# TITLE\r?\n\r?\n.*# JIRA ID"
    ))
 
 (define (response->fields resp)
