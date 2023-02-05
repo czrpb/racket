@@ -1,6 +1,6 @@
 #lang racket
 
-(require net/http-client)
+(require net/url)
 (require json)
 
 ; Parameters
@@ -11,8 +11,8 @@
 
 ; URL request helpers
 (define (make-url-gh/pr user repo pr)
-  ; (format "https://api.github.com/repos/~a/~a/pulls/~a" user repo pr)
-  (values "api.github.com" (format "/repos/~a/~a/pulls/~a" user repo pr))
+  (string->url (format "https://api.github.com/repos/~a/~a/pulls/~a" user repo pr))
+  ;(values "api.github.com" (format "/repos/~a/~a/pulls/~a" user repo pr))
   )
 
 (define (make-header/token token)
@@ -46,9 +46,9 @@
 
 (let*-values
     [
-     ((host-gh url-pr) (make-url-gh/pr (user) (repo) (pr)))
-     ((status-line headers port)
-      (http-sendrecv host-gh url-pr #:ssl? #t #:headers (list (make-header/token (token))))
+     ((url-gh/pr) (make-url-gh/pr (user) (repo) (pr)))
+     ((port)
+      (get-pure-port url-gh/pr (list (make-header/token (token))) #:redirections 5)
       )
      ((resp) (read-json port))
      ((ref title body) (response->fields resp))
