@@ -48,28 +48,33 @@
     [
      ((url-gh/pr) (make-url-gh/pr (user) (repo) (pr)))
      ((port)
-      (get-pure-port url-gh/pr (list (make-header/token (token))) #:redirections 5)
+      ;(get-pure-port url-gh/pr (list (make-header/token (token))) #:redirections 5)
+      (get-pure-port url-gh/pr #:redirections 5)
       )
      ((resp) (read-json port))
-     ((ref title body) (response->fields resp))
      ]
   (printf "Successfully got and parsed PR: ~a\n\n" (pr))
+  (displayln (url->string url-gh/pr))
+  (displayln resp)
 
-  (let [(ref-valid (regexp-match (hash-ref field-regexs 'ref) ref))]
-    (printf "\t~aBranch~aconforms to expected pattern.\n"
-            (if ref-valid "   " "!!! ")
-            (if ref-valid " " " does not ")
-            ))
+  (let*-values [((ref title body) (response->fields resp))]
 
-  (let [(title-valid (regexp-match (hash-ref field-regexs 'title) title))]
-    (printf "\t~aTitle~aconforms to expected pattern.\n"
-            (if title-valid "    " "!!! ")
-            (if title-valid " " " does not ")
-            ))
+    (let [(ref-valid (regexp-match (hash-ref field-regexs 'ref) ref))]
+      (printf "\t~aBranch~aconforms to expected pattern.\n"
+              (if ref-valid "   " "!!! ")
+              (if ref-valid " " " does not ")
+              ))
 
-  (let [(body-valid (regexp-match (hash-ref field-regexs 'body) body))]
-    (printf "\t~aBody~aconforms to expected pattern.\n"
-            (if body-valid "    " "!!! ")
-            (if body-valid " " " does not ")
-            ))
+    (let [(title-valid (regexp-match (hash-ref field-regexs 'title) title))]
+      (printf "\t~aTitle~aconforms to expected pattern.\n"
+              (if title-valid "    " "!!! ")
+              (if title-valid " " " does not ")
+              ))
+
+    (let [(body-valid (regexp-match (hash-ref field-regexs 'body) body))]
+      (printf "\t~aBody~aconforms to expected pattern.\n"
+              (if body-valid "    " "!!! ")
+              (if body-valid " " " does not ")
+              ))
+    )
   )

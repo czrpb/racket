@@ -48,10 +48,8 @@ What is is my pace (`??min mile`)?
 1. Pace: `1mile / 6:02min`
    * How long to run a mile? `4.831 * 75` seconds
    * `1mile / 362.325sec`
-   * then convert seconds to minutes
+   * 0then convert seconds to minutes
 
 Answer: About a `6min mile`!
 
-#### In Words
-
-
+> This makes sense as 
