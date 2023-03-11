@@ -55,7 +55,7 @@
      ]
   (printf "Successfully got and parsed PR: ~a\n\n" (pr))
   (displayln (url->string url-gh/pr))
-  (displayln resp)
+  (pretty-print resp)
 
   (let*-values [((ref title body) (response->fields resp))]
 
