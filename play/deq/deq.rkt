@@ -1,18 +1,18 @@
 #lang racket
 
 
-(define (arrive q v)
-  (let [(front (car q)) (back (cadr q))]
-    (list front (cons v back))
-    )
-  )
-
 (define (front q)
   (let [(front (car q)) (back (cadr q))]
     (if (empty? front)
         (car (reverse back))
         (car front)
         )
+    )
+  )
+
+(define (arrive q v)
+  (let [(front (car q)) (back (cadr q))]
+    (list front (cons v back))
     )
   )
 
