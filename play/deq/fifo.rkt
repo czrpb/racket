@@ -1,14 +1,7 @@
 #lang racket
 
 
-(define (front q)
-  (let [(front (car q)) (back (cadr q))]
-    (if (empty? front)
-        (car (reverse back))
-        (car front)
-        )
-    )
-  )
+(define (front q) (caar q))
 
 (define (arrive q v)
   (let [(front (car q)) (back (cadr q))]
@@ -19,9 +12,7 @@
 (define (depart q)
   (let [(front (car q)) (back (cadr q))]
     (if (empty? front)
-        (let-values [((back front) (split-at back (quotient (length back) 2)))]
-          (list (cdr (reverse front)) back)
-          )
+        (list (reverse back) '())
         (list (cdr front) back)
         )
     )
