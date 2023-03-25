@@ -14,17 +14,20 @@
 
 (define input (shuffle (range 10)))
 
+(pretty-print input)
+
 (define q (foldl add (queue) input))
 
 (pretty-print q)
 
-(define all (let loop [(q q) (a '())]
-              (if (empty q)
-                  a
-                  (loop (remove q) (cons (next q) a))
-                  )
-              )
-
+(define all (reverse
+             (let loop [(q q) (a '())]
+               (if (empty q)
+                   a
+                   (loop (remove q) (cons (next q) a))
+                   )
+               )
+             )
   )
 
 (pretty-print all)
