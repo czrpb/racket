@@ -43,8 +43,10 @@
     )
   )
 
+(define input-sorted (sort input < #:key car))
+
 (pretty-print input)
-(pretty-print (sort input < #:key car))
+(pretty-print input-sorted)
 
 (define q (foldl add (queue) input))
 
@@ -62,3 +64,5 @@
   )
 
 (pretty-print all)
+
+(equal? (map second input-sorted) all)
