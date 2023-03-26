@@ -44,6 +44,7 @@
   )
 
 (pretty-print input)
+(pretty-print (sort input < #:key car))
 
 (define q (foldl add (queue) input))
 
