@@ -15,22 +15,32 @@
 (define (element-right e) (fourth e))
 
 
-(define (add k-d q) (meld (element (first k-d) (second k-d)) q))
+(define (add k-d q)
+  (cond
+    [(empty q) (element (first k-d) (second k-d))]
+    [(< (first k-d) (element-key q)) (element (element-key q) (element-data q) (add k-d (element-left q)) (element-right q))]
+    [else (element (element-key q) (element-data q) (element-left q) (add k-d (element-right q)))]
+    )
+  )
 
-(define (next q) (element-data q))
+(define (next q)
+  (if (empty (element-left q))
+      (element-data q)
+      (next (element-left q))
+      )
+  )
 
 (define (remove q)
-  (let loop [(children (element-children q))]
-    (match children
-      ['() '()]
-      [(list q) q]
-      [(list q1 q2 children ...) (meld (meld q1 q2) (loop children))]
-      )
+  (cond
+    [(and (empty (element-left q)) (empty (element-right q))) '()]
+    [(empty (element-left q)) (element-right q)]
+    [else (element (element-key q) (element-data q) (remove (element-left q)) (element-right q))]
     )
   )
 
 ; ============================================================
 ; '((4 17) (7 19) (6 12) (2 13) (3 18) (5 14) (9 15) (1 10) (8 11) (0 16))
+; '((8 16) (6 15) (4 18) (3 19) (5 11) (0 13) (9 17) (7 10) (2 14) (1 12))
 
 (define input
   (for/list [(k (shuffle (range 10))) (e (shuffle (range 10 20)))]
