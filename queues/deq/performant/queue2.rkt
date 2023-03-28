@@ -30,13 +30,23 @@
 
 (define (last q) (back q))
 
-(define (leave q) (list (cdr (back q)) (front q)))
+(define (leave q)
+  (match q
+    [(list front '() #f) (queue)]
+    [(list front '() _back) (list front '() #f)]
+    [(list front middle _back)
+     (list front (cdr middle) (car middle))
+     ]
+    )
+  )
 
 ; ============================================================
 
 (define input (shuffle (range 10)))
 
 (pretty-print input)
+
+(define q (foldl add (queue) input))
 
 (pretty-print q)
 
