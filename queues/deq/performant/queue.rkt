@@ -1,32 +1,30 @@
 #lang racket
 
-(define (queue) '(() . ()))
+(define (queue) (list '() '()))
 
 (define empty (curry equal? (queue)))
 
-(define back car)
-(define front cdr)
+(define back first)
+(define front second)
 
-(define (add e q) (cons (cons e (back q)) (front q)))
-
-(define (next q) (car (front q)))
-
-(define (remove q)
-  (match q
-    [(cons back '())
-     (let-values [
-                  ((back front)
-                   (split-at back (quotient (length back) 2)))
-                  ]
-       (cons back (cdr front))
-       )]
-    [(cons back front) (cons back (cdr front))]
+(define (balance q)
+  (let-values [
+               ((back front)
+                (split-at (back q) (quotient (length (back q)) 2)))
+               ]
+    (list back (reverse front))
     )
   )
 
+(define (add e q) (list (cons e (back q)) (front q)))
+
+(define (next q) (car (front q)))
+
+(define (remove q) (list (back q) (cdr (front q))))
+
 (define (last q) (car (back q)))
 
-(define (leave q) (cons (cdr (back q)) (front q)))
+(define (leave q) (list (cdr (back q)) (front q)))
 
 ; ============================================================
 
@@ -34,7 +32,7 @@
 
 (pretty-print input)
 
-(define q (foldl add (queue) input))
+(define q (balance (foldl add (queue) input)))
 
 (pretty-print q)
 
