@@ -17,7 +17,16 @@
 
 (define (next q) (front q))
 
-(define (remove q) (list (back q) (cdr (front q))))
+(define (remove q)
+  (match q
+    [(list front '() #f) (queue)]
+    [(list front '() back) (list back '() #f)]
+    [(list front middle back)
+     (let [(elddim (reverse middle))]
+       (list (car elddim) (reverse (cdr elddim)) back))
+     ]
+    )
+  )
 
 (define (last q) (back q))
 
@@ -28,8 +37,6 @@
 (define input (shuffle (range 10)))
 
 (pretty-print input)
-
-(define q (balance (foldl add (queue) input)))
 
 (pretty-print q)
 
