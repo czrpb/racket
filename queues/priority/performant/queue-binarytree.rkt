@@ -15,6 +15,7 @@
 (define (element-right e) (fourth e))
 
 
+; O(log2 n)
 (define (add k-d q)
   (cond
     [(empty q) (element (first k-d) (second k-d))]
@@ -23,6 +24,7 @@
     )
   )
 
+; O(log2 n)
 (define (next q)
   (if (empty (element-left q))
       (element-data q)
@@ -30,6 +32,7 @@
       )
   )
 
+; O(log2 n)
 (define (remove q)
   (cond
     [(and (empty (element-left q)) (empty (element-right q))) '()]

@@ -25,10 +25,13 @@
     )
   )
 
+; O(1)
 (define (add k-d q) (meld (element (first k-d) (second k-d)) q))
 
+; O(1)
 (define (next q) (element-data q))
 
+; O(log2 n)
 (define (remove q)
   (let loop [(children (element-children q))]
     (match children
