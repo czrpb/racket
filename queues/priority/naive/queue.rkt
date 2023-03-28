@@ -4,6 +4,7 @@
 
 (define (empty q) (equal? '() q))
 
+; O(n)
 (define (add k-e q)
   (cond
     [(empty q) (list k-e)]
@@ -12,8 +13,10 @@
     )
   )
 
+; O(1)
 (define (next q) (car q))
 
+; O(1)
 (define (remove q) (cdr q))
 
 ; ============================================================
