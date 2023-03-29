@@ -1,6 +1,13 @@
 #lang racket
 
-(define counter (make-hash (list '(add . 0) '(next . 0) '(remove . 0))))
+(define counter
+  (make-hash
+   (list
+    '(add . 0) '(next . 0) '(remove . 0)
+    '(next-loop . 0) '(remove-loop . 0)
+    )
+   )
+  )
 
 (define (queue) '())
 
@@ -14,13 +21,31 @@
 
 ; O(n)
 (define (next q)
-  (car (sort q < #:key first))
+  ;(car (sort q < #:key first))
+  (hash-update! counter 'next add1)
+  (let loop [(q (cdr q)) (min (car q))]
+    (hash-update! counter 'next-loop add1)
+    (cond
+      [(empty q) min]
+      [(< (first (car q)) (first min)) (loop (cdr q) (car q))]
+      [else (loop (cdr q) min)]
+      )
+    )
   )
 
 ; O(n)
 (define (remove q)
+  ;(cdr (sort q < #:key first))
   (hash-update! counter 'remove add1)
-  (cdr (sort q < #:key first))
+  (let loop [(q (cdr q)) (min (car q)) (new-q '())]
+    (hash-update! counter 'remove-loop add1)
+    (cond
+      [(empty q) new-q]
+      [(< (first (car q)) (first min))
+       (loop (cdr q) (car q) new-q)]
+      [else (loop (cdr q) min (cons (car q) new-q))]
+      )
+    )
   )
 
 ; ============================================================
@@ -60,7 +85,11 @@
 
 (equal? input-sorted all)
 
-(displayln (format "counts => add: ~a, next: ~a, remove: ~a"
-                   (hash-ref counter 'add) (hash-ref counter 'next) (hash-ref counter 'remove)
-                   )
-           )
+(displayln
+ (format
+  "counts => add: ~a, next: ~a, next-loop: ~a, remove: ~a, remove-loop: ~a"
+  (hash-ref counter 'add)
+  (hash-ref counter 'next)  (hash-ref counter 'next-loop)
+  (hash-ref counter 'remove) (hash-ref counter 'remove-loop)
+  )
+ )
