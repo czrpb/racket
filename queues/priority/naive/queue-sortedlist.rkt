@@ -34,7 +34,7 @@
 ; (define input '((8 16) (6 15) (4 18) (3 19) (5 11) (0 13) (9 17) (7 10) (2 14) (1 12)))
 ; (define input '((6 17) (9 12) (3 19) (8 13) (7 16) (1 15) (2 10) (0 14) (4 18) (5 11)))
 
-(define key-range 1000)
+(define key-range 100000)
 
 (define input
   (for/list [
