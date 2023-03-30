@@ -11,20 +11,20 @@
   (hash-update! counter 'add add1)
   (cond
     [(empty q) (list k-e)]
-    [(< (first k-e) (first (next q))) (cons k-e q)]
-    [else (cons (next q) (add k-e (remove q)))]
+    [(< (first k-e) (first (next q #f))) (cons k-e q)]
+    [else (cons (next q #f) (add k-e (remove q #f)))]
     )
   )
 
 ; O(1)
-(define (next q)
-  (hash-update! counter 'next add1)
+(define (next q (measure #t))
+  (and measure (hash-update! counter 'next add1))
   (car q)
   )
 
 ; O(1)
-(define (remove q)
-  (hash-update! counter 'remove add1)
+(define (remove q (measure #t))
+  (and measure (hash-update! counter 'remove add1))
   (cdr q)
   )
 
@@ -32,13 +32,17 @@
 ; (define input '((0 20) (1 21) (2 22) (3 23) (4 24) (5 25) (6 26) (7 27) (8 28) (9 29)))
 ; (define input '((4 17) (7 19) (6 12) (2 13) (3 18) (5 14) (9 15) (1 10) (8 11) (0 16)))
 ; (define input '((8 16) (6 15) (4 18) (3 19) (5 11) (0 13) (9 17) (7 10) (2 14) (1 12)))
-(define input '((6 17) (9 12) (3 19) (8 13) (7 16) (1 15) (2 10) (0 14) (4 18) (5 11)))
+; (define input '((6 17) (9 12) (3 19) (8 13) (7 16) (1 15) (2 10) (0 14) (4 18) (5 11)))
 
-; (define input
-;   (for/list [(k (shuffle (range 10))) (e (shuffle (range 10 20)))]
-;     (list k e)
-;     )
-;   )
+(define key-range 1000)
+
+(define input
+  (for/list [
+             (k (shuffle (range key-range)))
+             (e (shuffle (range (* key-range 5) (* key-range 6))))]
+    (list k e)
+    )
+  )
 
 (pretty-print (list "input:" input))
 

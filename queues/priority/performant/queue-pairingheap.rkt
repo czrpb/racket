@@ -15,7 +15,7 @@
 
 (define counter
   (make-hash
-   (list '(add . 0) '(next . 0) '(remove . 0) '(meld . 0) '(loop . 0))
+   (list '(add . 0) '(next . 0) '(remove . 0) '(meld . 0) '(remove-loop . 0))
    )
   )
 
@@ -27,9 +27,15 @@
     [(empty q1) q2]
     [(empty q2) q1]
     [(< (element-key q1) (element-key q2))
-     (element (element-key q1) (element-data q1) (cons q2 (element-children q1)))]
+     (element
+      (element-key q1)
+      (element-data q1)
+      (cons q2 (element-children q1)))]
     [else
-     (element (element-key q2) (element-data q2) (cons q1 (element-children q2)))
+     (element
+      (element-key q2)
+      (element-data q2)
+      (cons q1 (element-children q2)))
      ]
     )
   )
@@ -50,7 +56,7 @@
 (define (remove q)
   (hash-update! counter 'remove add1)
   (let loop [(children (element-children q))]
-    (hash-update! counter 'loop add1)
+    (hash-update! counter 'remove-loop add1)
     (match children
       ['() '()]
       [(list q) q]
@@ -66,8 +72,12 @@
 ; (define input '((8 16) (6 15) (4 18) (3 19) (5 11) (0 13) (9 17) (7 10) (2 14) (1 12)))
 ; (define input '((6 17) (9 12) (3 19) (8 13) (7 16) (1 15) (2 10) (0 14) (4 18) (5 11)))
 
+(define key-range 1000)
+
 (define input
-  (for/list [(k (shuffle (range 10))) (e (shuffle (range 10 20)))]
+  (for/list [
+             (k (shuffle (range key-range)))
+             (e (shuffle (range (* key-range 5) (* key-range 6))))]
     (list k e)
     )
   )
@@ -97,9 +107,9 @@
 
 (equal? (map second input-sorted) all)
 
-(displayln (format "counts => add: ~a, next: ~a, remove: ~a, loop: ~a, meld: ~a"
+(displayln (format "counts => add: ~a, next: ~a, remove: ~a, remove-loop: ~a, meld: ~a"
                    (hash-ref counter 'add) (hash-ref counter 'next)
-                   (hash-ref counter 'remove) (hash-ref counter 'loop)
+                   (hash-ref counter 'remove) (hash-ref counter 'remove-loop)
                    (hash-ref counter 'meld)
                    )
            )

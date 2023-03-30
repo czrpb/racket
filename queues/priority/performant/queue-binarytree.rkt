@@ -42,7 +42,11 @@
   (cond
     [(and (empty (element-left q)) (empty (element-right q))) '()]
     [(empty (element-left q)) (element-right q)]
-    [else (element (element-key q) (element-data q) (remove (element-left q)) (element-right q))]
+    [else
+     (element
+      (element-key q)
+      (element-data q)
+      (remove (element-left q)) (element-right q))]
     )
   )
 
@@ -51,13 +55,17 @@
 ; (define input '((9 29) (8 28) (7 27) (6 26) (5 25) (4 24) (3 23) (2 22) (1 21) (0 20)))
 ; (define input '((4 17) (7 19) (6 12) (2 13) (3 18) (5 14) (9 15) (1 10) (8 11) (0 16)))
 ; (define input '((8 16) (6 15) (4 18) (3 19) (5 11) (0 13) (9 17) (7 10) (2 14) (1 12)))
-(define input '((6 17) (9 12) (3 19) (8 13) (7 16) (1 15) (2 10) (0 14) (4 18) (5 11)))
+; (define input '((6 17) (9 12) (3 19) (8 13) (7 16) (1 15) (2 10) (0 14) (4 18) (5 11)))
 
-; (define input
-;   (for/list [(k (shuffle (range 10))) (e (shuffle (range 10 20)))]
-;     (list k e)
-;     )
-;   )
+(define key-range 1000)
+
+(define input
+  (for/list [
+             (k (shuffle (range key-range)))
+             (e (shuffle (range (* key-range 5) (* key-range 6))))]
+    (list k e)
+    )
+  )
 
 (pretty-print (list "input:" input))
 
