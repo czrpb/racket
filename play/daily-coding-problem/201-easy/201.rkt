@@ -40,7 +40,7 @@
               (displayln l2)
               (displayln l2-pairs)
               (displayln l1)
-              (displayln "")
+              (displayln " ")
               (flatten
                (for/list [(i1 l1) (i2 l2-pairs)]
                  (match i2
