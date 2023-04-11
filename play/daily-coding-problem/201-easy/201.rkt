@@ -28,23 +28,36 @@
   )
 
 (define test1 '((1) (2 3) (1 5 1)))
-;(define test1 '((2 3) (1 5 1)))
+(define test2 '((1) (2 3) (4 5 6)))
+(define test3 '((1) (2 3) (4 5 6) (7 8 9 10)))
+(define test4 '((1) (2 3) (4 5 6) (7 8 9 10) (11 12 13 14 15)))
 
-(apply max
- (foldl
-  (λ (l1 l2)
-    (let [(l2-pairs (pairs (wrap-with-0s l2)))]
-      (flatten
-       (for/list [(i1 l1) (i2 l2-pairs)]
-         (match i2
-           [(list 'zero a) (+ i1 a)]
-           [(list a 'zero) (+ i1 a)]
-           [(list a b) (list (+ i1 a) (+ i1 b))]
-           )
+(define (max-path tree)
+  (apply max
+         (foldl
+          (λ (l1 l2)
+            (let [(l2-pairs (pairs (wrap-with-0s l2)))]
+              (displayln l2)
+              (displayln l2-pairs)
+              (displayln l1)
+              (displayln "")
+              (flatten
+               (for/list [(i1 l1) (i2 l2-pairs)]
+                 (match i2
+                   [(list 'zero a) (+ i1 a)]
+                   [(list a 'zero) (+ i1 a)]
+                   [(list a b) (list (+ i1 a) (+ i1 b))]
+                   )
+                 )
+               )
+              )
+            )
+          (car tree) (cdr tree)
+          )
          )
-       )
-      )
-    )
-  (car test1) (cdr test1)
   )
- )
+
+;(writeln (max-path test1))
+;(writeln (max-path test2))
+;(writeln (max-path test3))
+(writeln (max-path test4))
