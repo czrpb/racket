@@ -1,5 +1,7 @@
 #lang racket
 
+(provide new meld delete-min merge)
+
 (define (new key data (children '())) (list key data children))
 
 (define (find-min h) (cadr h))
@@ -22,16 +24,16 @@
     )
   )
 
-(define (meld-pairs children)
+(define (merge children)
   (match children
-    [(list c1 c2 children ...) (meld (meld c1 c2) (meld-pairs children))]
+    [(list c1 c2 children ...) (meld (meld c1 c2) (merge children))]
     [(list c) c]
     ['() '()]
     )
   )
 
 (define (delete-min h)
-  (meld-pairs (caddr h))
+  (merge (caddr h))
   )
 
 ; =====================================================
@@ -45,8 +47,8 @@
 (define h
   (foldl
    (λ (h acc-h) (meld h acc-h))
-   (new (gen-key) (gen-data))
-   heaps
+   (car heaps)
+   (cdr heaps)
    )
   )
 (pretty-print h)
