@@ -2,7 +2,7 @@
 
 (printf "\nStarting....\n")
 
-;(define overflows '(60 60 24 30 365))
+;(define overflows '(60 60 24 30 12))
 (define overflows '(5 3 2))
 
 ;(define clock '(0 0 0 0 0))
@@ -17,9 +17,9 @@
             [(c clock) (o overflows)]
     (let* [
            (c-inc (+ c inc))
-           (overflow (= o c-inc))
+           (overflow? (= o c-inc))
            ]
-      (values (cons (if overflow 0 c-inc) new_clock) (if overflow 1 0))
+      (values (cons (if overflow? 0 c-inc) new_clock) (if overflow? 1 0))
       )
     )
   )
