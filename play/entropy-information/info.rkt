@@ -2,12 +2,7 @@
 
 (displayln "\nStarting ....\n")
 
-(define input (vector->list (current-command-line-arguments)))
-
-(define input-len (length input))
-
-(define (make-pct v) (/ v input-len))
-
+(define (log2 v) (log v 2))
 (define (make-freq l)
   (foldl
    (lambda (v h) (hash-update h v add1 0))
@@ -16,12 +11,19 @@
    )
   )
 
-(define (log2 v) (log v 2))
+; =====================================
+
+(define input (vector->list (current-command-line-arguments)))
+(define input-len (length input))
+(define (input-pct v) (/ v input-len))
+(define input-freq (make-freq input))
+
+; =====================================
 
 (define data
-  (for/hash [((k v) (in-hash (make-freq input)))]
+  (for/hash [((k v) (in-hash input-freq))]
     (let* [
-           (pct (make-pct v))
+           (pct (input-pct v))
            (log (log2 pct))
            (entropy (* -1 pct log))
            ]
@@ -29,10 +31,13 @@
       )
     )
   )
+(define data-log2 (log2 (length (hash-keys data))))
+
+; =====================================
 
 (let* [
        (total-entropy (apply + (map fourth (hash-values data))))
-       (normalized-entropy (/ total-entropy (log2 (length (hash-keys data)))))
+       (normalized-entropy (if (zero? data-log2) 0 (/ total-entropy data-log2)))
        ]
   (pretty-print data)
   (printf "\nTotal entropy: ~a\n" total-entropy)
