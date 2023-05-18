@@ -7,32 +7,36 @@
     [(vector dividend divisor _ ...) (cons dividend divisor)]
     ))
 
-(define list->number (compose string->number (curryr string-join "")))
-
 (define (ld divisor dividend (result 0))
   (writeln divisor)
   (writeln dividend)
-  (foldl
-   (λ (d n-r)
-     (let [
-           (n (car n-r))
-           (r (cdr n-r))
-           ]
-       (writeln n-r)
-       (writeln d)
-       )
-     )
-   (cons (car dividend) 0)
-   (cdr dividend)
-   )
+  (for/fold
+   [
+    (remainder 0)
+    (result '())
+    #:result (for/sum [(p (in-naturals)) (r result)] (* r (expt 10 p)))
+    ]
+   [(digit dividend)]
+    (let*-values [
+                  ((part) (+ (* remainder 10) digit))
+                  ((q r) (quotient/remainder part divisor))
+                  ]
+      (writeln (format "~a : ~a : ~a" part digit result))
+      (values r (cons q result))
+      )
+    )
   )
 
 (match-let*
     [
-     ((cons dividend divisor) cmdline)
+     ((cons dividend-input divisor-input) cmdline)
      ]
-  (displayln (ld
-   (string->number divisor)
-   (map (λ (n) (- (char->integer n) 48)) (string->list dividend)))
-   )
+  (let* [
+         (divisor (string->number divisor-input))
+         (dividend (map (λ (n) (- (char->integer n) 48)) (string->list dividend-input)))
+         (answer (ld divisor dividend))
+         (correct (if (= answer (quotient (string->number dividend-input) divisor)) "" " not"))
+         ]
+    (printf "answer: ~a is~a correct.\n" answer correct)
+    )
   )
