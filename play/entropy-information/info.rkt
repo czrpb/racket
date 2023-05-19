@@ -13,7 +13,15 @@
 
 ; =====================================
 
-(define input (vector->list (current-command-line-arguments)))
+(define input
+  (match-let
+      [((vector filename _ ...) (current-command-line-arguments))]
+    (let [(content (port->string (open-input-file filename #:mode 'text)))]
+      (string-split content)
+      )
+    )
+  )
+
 (define input-len (length input))
 (define (input-pct v) (/ v input-len))
 (define input-freq (make-freq input))
