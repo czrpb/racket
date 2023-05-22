@@ -17,4 +17,7 @@
     )
   )
 
+(define (calc-next-digit m d0 (b 10))
+)
+
 (writeln num)
