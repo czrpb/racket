@@ -49,5 +49,6 @@
        ]
   (pretty-print data)
   (printf "\nTotal entropy: ~a\n" total-entropy)
-  (printf "\tNormalized entropy: ~a\n" normalized-entropy)
+  (printf "\tNormalized entropy (or surprize): ~a\n" normalized-entropy)
+  (printf "\tInformation (1 - surprize): ~a\n" (- 1 normalized-entropy))
   )
