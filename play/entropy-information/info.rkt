@@ -39,6 +39,7 @@
       )
     )
   )
+
 (define data-log2 (log2 (length (hash-keys data))))
 
 ; =====================================
