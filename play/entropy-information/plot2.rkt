@@ -72,13 +72,6 @@
       )
     )
   )
-;   (for/list [(i (range 6))]
-;   (let [(~a starting-data )]
-;   )
-;     (cons
-;      (calc (string->list starting-data)) i)
-;     )
-;   )
 
 (pretty-print pts)
 

@@ -36,49 +36,7 @@
 
 (define starting-data "aaaaaaaa")
 
-(define pts
-  (let [(max-iterations 9)]
-    (let loop [
-               (s starting-data)
-               (i 0)
-               (result '())
-               ]
-      (if (= i max-iterations)
-          (reverse result)
-          (let* [(new-s (~a s
-                            (make-string
-                             i
-                             (integer->char (+ 97 i))
-                             )
-                            ))
-                 (r (calc new-s))
-
-                 (r-keys (hash-keys r))
-                 (r-keys-length (length r-keys))
-                 (r-values (hash-values r))
-                 (r-individual-entropies (map fourth r-values))
-
-                 (r-entropy (apply + r-individual-entropies))
-                 (r-normalized-entropy
-                  (/ r-entropy
-                   (if (= r-keys-length 1) 1 (log2 r-keys-length))
-                   ))
-                 ]
-            (loop new-s
-                  (add1 i)
-                  (cons (list new-s r r-entropy r-normalized-entropy) result))
-            )
-          )
-      )
-    )
-  )
-;   (for/list [(i (range 6))]
-;   (let [(~a starting-data )]
-;   )
-;     (cons
-;      (calc (string->list starting-data)) i)
-;     )
-;   )
+(define pts 'na)
 
 (pretty-print pts)
 
