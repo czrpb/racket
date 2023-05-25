@@ -11,7 +11,7 @@
   (foldl
    (lambda (v h) (hash-update h v add1 0))
    (hash)
-   (string->list l)
+   l
    )
   )
 
@@ -34,9 +34,41 @@
 
 (define calc (compose make-data make-freq))
 
-(define starting-data "aaaaaaaa")
+(define starting-data (make-string 21 #\a))
 
-(define pts 'na)
+(define pts
+  (let loop [(i 0) (s (string->list starting-data)) (result '())]
+    (let* [
+           (dropped-s (drop s i))
+
+           (next-letter (integer->char (+ 97 i)))
+           (added-next-letters (make-list i next-letter))
+
+           (new-s (append dropped-s added-next-letters))
+
+           (r (calc new-s))
+           (r-keys (hash-keys r))
+           (r-keys-length (length r-keys))
+           (r-values (hash-values r))
+           (r-individual-entropies (map fourth r-values))
+
+           (r-entropy (apply + r-individual-entropies))
+           (r-normalized-entropy
+            (/ r-entropy
+               (if (= r-keys-length 1) 1 (log2 r-keys-length))
+               ))
+           ]
+      (if (= i 6)
+          (reverse result)
+          (loop
+           (add1 i)
+           new-s
+           (cons (list (~a new-s) r r-entropy r-normalized-entropy)
+                 result))
+          )
+      )
+    )
+  )
 
 (pretty-print pts)
 
