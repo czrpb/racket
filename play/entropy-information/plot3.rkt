@@ -70,7 +70,14 @@
     )
   )
 
-(pretty-print pts)
+(for [(record pts)]
+  (displayln (~a
+              (~a (first record) #:min-width 15)
+              ": "
+              (fourth record)
+              )
+             )
+  )
 
 ; (plot-x-label "Percent / Frequency")
 ; (plot-y-label "Entropy")

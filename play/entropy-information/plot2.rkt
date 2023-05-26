@@ -61,8 +61,8 @@
                  (r-entropy (apply + r-individual-entropies))
                  (r-normalized-entropy
                   (/ r-entropy
-                   (if (= r-keys-length 1) 1 (log2 r-keys-length))
-                   ))
+                     (if (= r-keys-length 1) 1 (log2 r-keys-length))
+                     ))
                  ]
             (loop new-s
                   (add1 i)
@@ -73,7 +73,14 @@
     )
   )
 
-(pretty-print pts)
+(for [(record pts)]
+  (displayln (~a
+              (~a (first record) #:min-width 44)
+              ": "
+              (fourth record)
+              )
+             )
+  )
 
 ; (plot-x-label "Percent / Frequency")
 ; (plot-y-label "Entropy")
