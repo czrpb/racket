@@ -13,14 +13,19 @@
 
 (render
  (window
+  #:size '(800 600)
   #:title "Entropy"
   (vpanel
    #:style '(border)
+
    (vpanel
     #:stretch '(#f #f)
     (button "Add Symbol"
-            (λ () (obs-update! @symbols (λ (syms) (cons (sym (current-monotonic-nanoseconds) 1) syms)))))
-    )
+            (λ () (obs-update! @symbols
+                               (λ (syms) (cons (sym (current-monotonic-nanoseconds) 1) syms))
+                               ))
+            ))
+
    (list-view
     #:key sym-chr
     @symbols
@@ -28,6 +33,7 @@
       (text (~a chr))
       )
     )
+
    (vpanel
     #:stretch '(#f #f)
     (spacer)
@@ -35,6 +41,7 @@
     (spacer)
     (text "Calculations to come!")
     )
+
    )
   )
  )
