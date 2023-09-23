@@ -38,7 +38,7 @@
 
 (displayln "\n")
 
-(calc 6 5 6)
+(calc 6 4 7)
 
 (displayln "\n")
 
