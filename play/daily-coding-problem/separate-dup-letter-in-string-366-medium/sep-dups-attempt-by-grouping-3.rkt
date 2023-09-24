@@ -9,17 +9,16 @@
 
 (displayln "\nStarting ...\n")
 
-(define letters "abcdefg") ;"abcdefghij")
+(define letters "abcde") ;"abcdefghij")
 
 (define test-strs
-  (cons "yyzy"
-        (for/list [(_ (range 25))]
-          (list->string (random-sample letters 10))
-          )
-        )
-  ;'("fcdiajdchf" "fcdcajdccf")
+  (append
+   '("yyzy" "cdbbbdccdc" "faeeegaeba" "fcdiajdchf" "fcdcajdccf")
+   (for/list [(_ (range 25))]
+     (list->string (random-sample letters 10))
+     )
+   )
   )
-(writeln test-strs)
 
 (define strs-grouped
   [for/list [(str test-strs)]
@@ -32,35 +31,37 @@
      )
     ]
   )
-(writeln strs-grouped)
-
-(define lofls->string [compose (curry apply ~a) (curry map car)])
-(define split-str-group [curry partition (compose (curry = 1) length)])
-(define [multi-merge multiple singles (srt "")]
-  (let loop [(a (car multiple)) (b (cdr singles)) (str "")]
-    (cond
-      [(and (empty? a) (empty? b)) str]
-      [(and ((negate empty?) a) (empty? b)) 'null]
-      [(and (empty? a) ((negate empty?) b)) (~a str (apply ~a (map car b)))]
-      [true {loop (cdr a) (cdr b) (~a str (car a) (caar b))}]
-      )
-    )
-  )
 
 (define strs-build-initial-str
   [for/list ([str-group strs-grouped])
-    (let loop ([str-group str-group] [str ""])
-      [let-values ([(singles multiples) (split-str-group str-group)])
-        (cond
-          [(empty? multiples) (~a str (lofls->string singles))]
-          [(= 1 (length multiples))
-           (let [(merged [multi-merge multiples singles])]
-             [if (eq? 'null merged) merged (~a str merged)])
-           ]
-          [true {loop (append singles (map cdr multiples)) (~a str (lofls->string multiples))}]
-          )
+    (let loop [(largest (car str-group)) (others (cdr str-group)) (str "")]
+      ; (printf "\tlargest: ~a ; others: ~a ; str: ~a\n" largest others str)
+      [cond
+        ([and (empty? largest) (empty? others)] str)
+        ([empty? others] 'null)
+        ([empty? largest] {loop (car others) (cdr others) str})
+        (true [let* (
+                     [other (car others)]
+                     [others (cdr others)]
+
+                     [letter (car other)]
+                     [other (cdr other)]
+                     )
+                {loop
+                 (cdr largest)
+                 [cond
+                   ([empty? other] others)
+                   ([< 1 (length other)] [cons other others])
+                   (true (append others [list other]))
+                   ]
+                 (~a str [car largest] letter)}
+                ]
+              )
         ]
       )
     ]
   )
-(writeln strs-build-initial-str)
+
+(for [(a test-strs) (b strs-grouped) (c strs-build-initial-str)]
+  (printf "~a : ~a : ~a\n" a b c)
+  )
