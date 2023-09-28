@@ -7,7 +7,6 @@
 
 (require "penguin-data.rkt")
 
-
 (let* [
        (adelie? [compose (curry equal? "Adelie") car])
        (adelie-data [sort (map cdr [filter adelie? csv-data]) < #:key car])
