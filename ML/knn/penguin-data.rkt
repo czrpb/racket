@@ -1,6 +1,6 @@
 #lang racket
 
-(provide csv-data)
+(provide csv-data x-min x-max y-min y-max)
 
 ; Parameters
 (define key (make-parameter #f))
@@ -43,3 +43,24 @@
 
 (define data [csv-file-read (csv-file) #px"\\s*\"?,\"?\\s*"])
 (define csv-data [filter second data])
+
+(define x-min [make-parameter #f])
+(define x-max [make-parameter #f])
+(define y-min [make-parameter #f])
+(define y-max [make-parameter #f])
+
+(x-min [cadar csv-data])
+(x-max [cadar csv-data])
+(y-min [caddar csv-data])
+(y-max [caddar csv-data])
+(for [(record csv-data)]
+  [let ([x (second record)] [y (third record)])
+    (cond
+      [(< x (x-min)) (x-min [- x 50])]
+      [(< (x-max) x) (x-max [+ x 50])]
+      )
+    (cond
+      [(< y (y-min)) (y-min [- y 5])]
+      [(< (y-max) y) (y-max [+ y 5])]
+      )
+    ])
