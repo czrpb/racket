@@ -16,9 +16,9 @@
    [("-k" "--key-field") k "Key Field" (key k)]
    [("-f" "--fields") f "Fields" (field-nums [map string->number (string-split f ",")])]
    [("-c" "--csv-file") c "CSV filename" (csv-file c)]
-   [("--xy") xy "Classify at the given X,Y"
+   [("--classify-xy") xy "Classify at the given X,Y"
     (let [(xy [string-split xy ","])]
-     (x [first xy])
-     (y [first xy])
+     (x [(compose string->number first) xy])
+     (y [(compose string->number second) xy])
      )]
    ))

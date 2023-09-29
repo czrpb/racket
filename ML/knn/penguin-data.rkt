@@ -1,6 +1,6 @@
 #lang racket
 
-(require "get-cmdline.rkt")
+(require [only-in "get-cmdline.rkt" field-nums csv-file])
 
 (provide csv-data x-min x-max y-min y-max)
 
