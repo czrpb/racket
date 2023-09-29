@@ -49,7 +49,7 @@
         #:y-min (y-min) #:y-max (y-max) #:y-label "Bill Length"
         ]
 
-  [plot-file (list adelie-points gentoo-points chinstrap-points)
+  [plot-file (list adelie-points gentoo-points chinstrap-points to-classify)
              "penguins.png" 'png
              #:width 1024 #:height 768
              #:x-min (x-min) #:x-max (x-max) #:x-label "Body Mass"
