@@ -25,7 +25,7 @@
     (append
      (list [list (x) (y)] '[4175.01 45.89] '[2862 60])
      (for/list [(_ [range 5])] [list (gen-x) (gen-y)]))
-    (list '[2862 60])
+;    (list '[2862 60])
     ]
   )
 
