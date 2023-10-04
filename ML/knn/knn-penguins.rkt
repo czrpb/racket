@@ -24,8 +24,8 @@
          )
     (append
      (list [list (x) (y)] '[4175.01 45.89] '[2862 60])
-     (for/list [(_ [range 5])] [list (gen-x) (gen-y)]))
-;    (list '[2862 60])
+     (for/list [(_ [range 10])] [list (gen-x) (gen-y)]))
+    ;    (list '[2862 60])
     ]
   )
 
@@ -81,7 +81,8 @@
         [map (curryr nearest-neighbors csv-data 5) to-classify-data])
        (to-classify-classified [map (compose penguin->color classify) to-classify-nns])
        (classified-points
-        [map (λ (pt classification) [points (list pt) #:sym 'full6star #:color classification])
+        [map (λ (pt classification)
+               [points (list pt) #:sym 'full6star #:color classification #:size 15])
              to-classify-data to-classify-classified])
 
        (adelie? [compose (curry equal? "Adelie") car])
