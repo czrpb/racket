@@ -36,7 +36,10 @@
         [(list first middle ... last) #:when ([negate char=?] first last)
                                       (loop (list-of-chars->string middle) (~a new-str first last))]
         [_ 'null]
-        ))))
+        )
+      )
+    )
+  )
 
 (writeln test-strs-sorted)
 (writeln valid-test-strs)
