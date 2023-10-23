@@ -1,9 +1,9 @@
 #lang racket
 
-(provide key field-nums csv-file x y)
+(provide k field-nums csv-file x y)
 
 ; Parameters
-(define key (make-parameter #f))
+(define k (make-parameter 5))
 (define field-nums (make-parameter #f))
 (define csv-file (make-parameter #f))
 (define x (make-parameter #f))
@@ -13,7 +13,7 @@
 (define action
   (command-line
    #:once-each
-   [("-k" "--key-field") k "Key Field" (key k)]
+   [("-k" "--knn") k_ "K Nearest Neighbors" (k k_)]
    [("-f" "--fields") f "Fields" (field-nums [map string->number (string-split f ",")])]
    [("-c" "--csv-file") c "CSV filename" (csv-file c)]
    [("--classify-xy") xy "Classify at the given X,Y"

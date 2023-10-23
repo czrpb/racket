@@ -5,7 +5,7 @@
 (require plot)
 (plot-new-window? #t)
 
-(require [only-in "get-cmdline.rkt" x y])
+(require [only-in "get-cmdline.rkt" k x y])
 (require [only-in "penguin-data.rkt" csv-data x-min x-max y-min y-max])
 
 (x-min [exact-floor (x-min)])
@@ -50,7 +50,7 @@
        ]
   )
 
-(define [nearest-neighbors unclassified records (k 1)]
+(define [nearest-neighbors unclassified records k]
   [let* ([sort-on-first (curryr sort< #:key first)]
          [pt-dist-to-unclassified
           (λ (pt) (cons [pt-dist unclassified (cdr pt)] pt))]
@@ -76,9 +76,11 @@
     ])
 
 (let* [
+       (to-classify-against csv-data)
+
        (to-classify-data to-be-classified)
        (to-classify-nns
-        [map (curryr nearest-neighbors csv-data 5) to-classify-data])
+        [map (curryr nearest-neighbors to-classify-against (k)) to-classify-data])
        (to-classify-classified [map (compose penguin->color classify) to-classify-nns])
        (classified-points
         [map (λ (pt classification)
