@@ -5,7 +5,7 @@
 (require plot)
 (plot-new-window? #t)
 
-(require [only-in "get-cmdline.rkt" k x y])
+(require [only-in "get-cmdline.rkt" k k2 x y])
 (require [only-in "penguin-data.rkt" csv-data x-min x-max y-min y-max])
 
 (x-min [exact-floor (x-min)])
@@ -30,6 +30,7 @@
   )
 
 (define sort< [curryr sort <])
+(define list-sample [λ (l n) (take [shuffle l] n)])
 
 (define [pt-norm pt]
   [let ([x (first pt)] [y (second pt)])
@@ -76,17 +77,6 @@
     ])
 
 (let* [
-       (to-classify-against csv-data)
-
-       (to-classify-data to-be-classified)
-       (to-classify-nns
-        [map (curryr nearest-neighbors to-classify-against (k)) to-classify-data])
-       (to-classify-classified [map (compose penguin->color classify) to-classify-nns])
-       (classified-points
-        [map (λ (pt classification)
-               [points (list pt) #:sym 'full6star #:color classification #:size 15])
-             to-classify-data to-classify-classified])
-
        (adelie? [compose (curry equal? "Adelie") car])
        (adelie-records [filter adelie? csv-data])
        (adelie-data [sort (map cdr adelie-records) < #:key car])
@@ -101,6 +91,22 @@
        (chinstrap-records [filter chinstrap? csv-data])
        (chinstrap-data [sort (map cdr chinstrap-records) < #:key car])
        (chinstrap-points [points chinstrap-data #:label "Chinstrap" #:sym 'fulltriangle #:color "blue"])
+
+       (to-classify-against
+        (if (k2)
+            (apply append
+                   [map (curryr list-sample (k2))
+                        (list adelie-records gentoo-records chinstrap-records)])
+            csv-data))
+
+       (to-classify-data to-be-classified)
+       (to-classify-nns
+        [map (curryr nearest-neighbors to-classify-against (k)) to-classify-data])
+       (to-classify-classified [map (compose penguin->color classify) to-classify-nns])
+       (classified-points
+        [map (λ (pt classification)
+               [points (list pt) #:sym 'full6star #:color classification #:size 15])
+             to-classify-data to-classify-classified])
        ]
   (writeln adelie-data)
   (writeln gentoo-data)
