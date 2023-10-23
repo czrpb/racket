@@ -1,8 +1,12 @@
 #lang racket
 
+(require plot)
+
 (require [only-in "get-cmdline.rkt" field-nums csv-file])
 
-(provide csv-data x-min x-max y-min y-max)
+(provide all-data x-min x-max y-min y-max)
+
+(struct penguin-data (raw data points))
 
 (define [extract-species fullname]
   [car (string-split fullname)]
@@ -51,3 +55,35 @@
       [(< (y-max) y) (y-max [+ y 5])]
       )
     ])
+
+(define adelie
+  [let* (
+         (adelie? [compose (curry equal? "Adelie") car])
+         (adelie-records [filter adelie? csv-data])
+         (adelie-data [sort (map cdr adelie-records) < #:key car])
+         (adelie-points [points adelie-data #:label "Adelie" #:sym 'fullcircle #:color "red"])
+         )
+    (penguin-data adelie-records adelie-data adelie-points)
+    ])
+
+(define gentoo
+  [let* (
+         (gentoo? [compose (curry equal? "Gentoo") car])
+         (gentoo-records [filter gentoo? csv-data])
+         (gentoo-data [sort (map cdr gentoo-records) < #:key car])
+         (gentoo-points [points gentoo-data #:label "Gentoo" #:sym 'fullsquare #:color "green"])
+         )
+    (penguin-data gentoo-records gentoo-data gentoo-points)
+    ])
+
+(define chinstrap
+  [let* (
+         (chinstrap? [compose (curry equal? "Chinstrap") car])
+         (chinstrap-records [filter chinstrap? csv-data])
+         (chinstrap-data [sort (map cdr chinstrap-records) < #:key car])
+         (chinstrap-points [points chinstrap-data #:label "Chinstrap" #:sym 'fulltriangle #:color "blue"])
+         )
+    (penguin-data chinstrap-records chinstrap-data chinstrap-points)
+    ])
+
+(define all-data [list csv-data adelie gentoo chinstrap])

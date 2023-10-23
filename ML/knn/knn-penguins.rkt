@@ -6,7 +6,7 @@
 (plot-new-window? #t)
 
 (require [only-in "get-cmdline.rkt" k k2 x y])
-(require [only-in "penguin-data.rkt" csv-data x-min x-max y-min y-max])
+(require [only-in "penguin-data.rkt" all-data x-min x-max y-min y-max])
 
 (x-min [exact-floor (x-min)])
 (y-min [exact-floor (y-min)])
