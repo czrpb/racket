@@ -15,7 +15,7 @@
 (define action
   (command-line
    #:once-each
-   [("-k" "--knn") k_ "K Nearest Neighbors" (k k_)]
+   [("-k" "--knn") k_ "K Nearest Neighbors" (k [string->number k_])]
    [("--k2") k2_ "K Subset Size" (k2 [string->number k2_])]
    [("--centroid") "Use Centroid for Classification" (centroid #t)]
    [("-f" "--fields") f "Fields" (field-nums [map string->number (string-split f ",")])]

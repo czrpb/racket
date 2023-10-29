@@ -78,9 +78,11 @@
          [sorted-dist-to-unclassified (compose sort-on-first map-dist-to-unclassified)]
          (nn-records [sorted-dist-to-unclassified records])
          )
-    (writeln unclassified)
-    (writeln nn-records)
-    (writeln "")
+    ; (writeln records)
+    ; (writeln k)
+    ; (writeln unclassified)
+    ; (writeln nn-records)
+    ; (writeln "")
     (take nn-records k)
     ]
   )
@@ -100,22 +102,25 @@
 (let* [
        (to-classify-against
         [cond
-          (centroid (k 1)
-                    [append (hash-refs the-data '[adelie centroid])
-                            (hash-refs the-data '[gentoo centroid])
-                            (hash-refs the-data '[chinstrap centroid])])
-          ((k2)
+          ([centroid] (displayln "Classifying against centroids....")
+                      (k 1)
+                      [append (hash-refs the-data '[adelie centroid])
+                              (hash-refs the-data '[gentoo centroid])
+                              (hash-refs the-data '[chinstrap centroid])])
+          ([k2]
+           (printf "Classifying against ~a random points....\n" [k2])
            (apply append
                   [map (curryr list-sample (k2))
                        (list [hash-refs the-data '(adelie classify)]
                              [hash-refs the-data '(gentoo classify)]
                              [hash-refs the-data '(chinstrap classify)])]))
-          (else (hash-ref [hash-ref the-data 'csv] 'classify))
+          (else (displayln "Classifying against all points....")
+                (hash-ref [hash-ref the-data 'csv] 'classify))
           ])
 
        (to-classify-data to-be-classified)
        (to-classify-nns
-        [map (curryr nearest-neighbors to-classify-against (k)) to-classify-data])
+        [map (curryr nearest-neighbors to-classify-against [k]) to-classify-data])
        (to-classify-classified [map (compose penguin->color classify) to-classify-nns])
        (classified-points
         [map (λ (pt classification)
