@@ -5,51 +5,70 @@
 (require plot)
 (plot-new-window? #t)
 
-(require [only-in "get-cmdline.rkt" k k2 x y])
-(require [only-in "penguin-data.rkt" all-data x-min x-max y-min y-max])
+(require [only-in "get-cmdline.rkt" k k2 centroid x y])
 
-(x-min [exact-floor (x-min)])
-(y-min [exact-floor (y-min)])
-(x-max [exact-ceiling (x-max)])
-(y-max [exact-ceiling (y-max)])
-(define x-range [- (x-max) (x-min)])
-(define y-range [- (y-max) (y-min)])
-(define [x% x] [* (/ [- x (x-min)] x-range) 100])
-(define [y% y] [* (/ [- y (y-min)] y-range) 100])
+(require [only-in "utils.rkt"
+                  x-floor x-ceiling y-floor y-ceiling
+                  sort< list-sample pt-dist])
 
-(define to-be-classified
-  [let* (
-         [gen-x (curry random [x-min] [x-max])]
-         [gen-y (curry random [y-min] [y-max])]
-         )
-    (append
-     (list [list (x) (y)] '[4175.01 45.89] '[2862 60])
-     (for/list [(_ [range 10])] [list (gen-x) (gen-y)]))
-    ;    (list '[2862 60])
+(require [only-in "penguin-data.rkt" the-data x-min x-max y-min y-max])
+
+(define [hash-refs h ks] [foldl (lambda [k a] [hash-ref a k]) h ks])
+
+(x-floor [exact-floor (x-min)])
+(y-floor [exact-floor (y-min)])
+(x-ceiling [exact-ceiling (x-max)])
+(y-ceiling [exact-ceiling (y-max)])
+
+(define [penguin-points str sym color]
+  [list
+   (points [map cdr (hash-refs the-data [list sym 'classify])]
+           #:label str #:sym 'fullcircle #:color color #:size 10)
+   (points [map cdr (hash-refs the-data [list sym 'remaining])]
+           #:sym 'circle #:color color #:size 5)
+   ]
+  )
+
+(define adelie-points [penguin-points "Adelie" 'adelie "red"])
+
+(define gentoo-points [penguin-points "Gentoo" 'gentoo "green"])
+
+(define chinstrap-points [penguin-points "Chinstrap" 'chinstrap "blue"])
+; [list
+;  (points [map cdr (hash-refs the-data '[adelie classify])]
+;          #:label "Adelie" #:sym 'fullcircle #:color "red")
+;  (points [map cdr (hash-refs the-data '[adelie remaining])]
+;          #:label "Adelie" #:sym 'circle #:color "red")
+;  ]
+; )
+; [points (hash-refs the-data '[adelie data ])
+;         #:label "Adelie" #:sym 'circle #:color "red"])
+
+(define centroid-points
+  [let (
+        [adelie-data (map cdr [hash-ref (hash-ref the-data 'adelie) 'centroid])]
+        [gentoo-data (map cdr [hash-ref (hash-ref the-data 'gentoo) 'centroid])]
+        [chinstrap-data (map cdr [hash-ref (hash-ref the-data 'chinstrap) 'centroid])]
+        )
+    (list
+     [points adelie-data #:sym 'oasterisk #:color "red" #:size 20]
+     [points gentoo-data #:sym 'oasterisk #:color "green" #:size 20]
+     [points chinstrap-data #:sym 'oasterisk #:color "blue" #:size 20]
+     )
     ]
   )
 
-(define sort< [curryr sort <])
-(define list-sample [λ (l n) (take [shuffle l] n)])
-
-(define [pt-norm pt]
-  [let ([x (first pt)] [y (second pt)])
-    (list [x% x] [y% y])
+(define to-be-classified
+  [let* (
+         [gen-x (curry random [x-floor] [x-ceiling])]
+         [gen-y (curry random [y-floor] [y-ceiling])]
+         )
+    (append
+     (list [list (x) (y)] '[4175 45.9] '[2862 60])
+     ;(for/list [(_ [range 10])] [list (gen-x) (gen-y)])
+     '()
+     )
     ])
-(define pt-dist
-  [compose
-   sqrt
-   (curry apply +)
-   (curry map sqr)
-   (curry map -)
-   (λ [pt1 pt2] [values (pt-norm pt1) (pt-norm pt2)])])
-(define pt-sum [curry map +])
-
-(define [centroid pts]
-  [map (curryr / (length pts))
-       (foldl pt-sum '(0.0 0.0) pts)
-       ]
-  )
 
 (define [nearest-neighbors unclassified records k]
   [let* ([sort-on-first (curryr sort< #:key first)]
@@ -59,7 +78,9 @@
          [sorted-dist-to-unclassified (compose sort-on-first map-dist-to-unclassified)]
          (nn-records [sorted-dist-to-unclassified records])
          )
+    (writeln unclassified)
     (writeln nn-records)
+    (writeln "")
     (take nn-records k)
     ]
   )
@@ -77,27 +98,20 @@
     ])
 
 (let* [
-       (adelie? [compose (curry equal? "Adelie") car])
-       (adelie-records [filter adelie? csv-data])
-       (adelie-data [sort (map cdr adelie-records) < #:key car])
-       (adelie-points [points adelie-data #:label "Adelie" #:sym 'fullcircle #:color "red"])
-
-       (gentoo? [compose (curry equal? "Gentoo") car])
-       (gentoo-records [filter gentoo? csv-data])
-       (gentoo-data [sort (map cdr gentoo-records) < #:key car])
-       (gentoo-points [points gentoo-data #:label "Gentoo" #:sym 'fullsquare #:color "green"])
-
-       (chinstrap? [compose (curry equal? "Chinstrap") car])
-       (chinstrap-records [filter chinstrap? csv-data])
-       (chinstrap-data [sort (map cdr chinstrap-records) < #:key car])
-       (chinstrap-points [points chinstrap-data #:label "Chinstrap" #:sym 'fulltriangle #:color "blue"])
-
        (to-classify-against
-        (if (k2)
-            (apply append
-                   [map (curryr list-sample (k2))
-                        (list adelie-records gentoo-records chinstrap-records)])
-            csv-data))
+        [cond
+          (centroid (k 1)
+                    [append (hash-refs the-data '[adelie centroid])
+                            (hash-refs the-data '[gentoo centroid])
+                            (hash-refs the-data '[chinstrap centroid])])
+          ((k2)
+           (apply append
+                  [map (curryr list-sample (k2))
+                       (list [hash-refs the-data '(adelie classify)]
+                             [hash-refs the-data '(gentoo classify)]
+                             [hash-refs the-data '(chinstrap classify)])]))
+          (else (hash-ref [hash-ref the-data 'csv] 'classify))
+          ])
 
        (to-classify-data to-be-classified)
        (to-classify-nns
@@ -105,22 +119,17 @@
        (to-classify-classified [map (compose penguin->color classify) to-classify-nns])
        (classified-points
         [map (λ (pt classification)
-               [points (list pt) #:sym 'full6star #:color classification #:size 15])
+               [points (list pt) #:sym 'full6star #:color classification #:size 25])
              to-classify-data to-classify-classified])
        ]
-  (writeln adelie-data)
-  (writeln gentoo-data)
-  (writeln chinstrap-data)
-  (writeln to-classify-data)
-  (writeln to-classify-nns)
 
-  [plot (list adelie-points gentoo-points chinstrap-points classified-points)
+  [plot (list adelie-points gentoo-points chinstrap-points classified-points centroid-points)
         #:width 1024 #:height 768
         #:x-min (x-min) #:x-max (x-max) #:x-label "Body Mass"
         #:y-min (y-min) #:y-max (y-max) #:y-label "Bill Length"
         ]
 
-  [plot-file (list adelie-points gentoo-points chinstrap-points classified-points)
+  [plot-file (list adelie-points gentoo-points chinstrap-points classified-points centroid-points)
              "penguins.png" 'png
              #:width 1024 #:height 768
              #:x-min (x-min) #:x-max (x-max) #:x-label "Body Mass"
