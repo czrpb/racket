@@ -28,21 +28,9 @@
            #:sym 'circle #:color color #:size 5)
    ]
   )
-
 (define adelie-points [penguin-points "Adelie" 'adelie "red"])
-
 (define gentoo-points [penguin-points "Gentoo" 'gentoo "green"])
-
 (define chinstrap-points [penguin-points "Chinstrap" 'chinstrap "blue"])
-; [list
-;  (points [map cdr (hash-refs the-data '[adelie classify])]
-;          #:label "Adelie" #:sym 'fullcircle #:color "red")
-;  (points [map cdr (hash-refs the-data '[adelie remaining])]
-;          #:label "Adelie" #:sym 'circle #:color "red")
-;  ]
-; )
-; [points (hash-refs the-data '[adelie data ])
-;         #:label "Adelie" #:sym 'circle #:color "red"])
 
 (define centroid-points
   [let (
@@ -65,26 +53,27 @@
          )
     (append
      (list [list (x) (y)] '[4175 45.9] '[2862 60])
-     ;(for/list [(_ [range 10])] [list (gen-x) (gen-y)])
-     '()
+     (for/list [(_ [range 10])] [list (gen-x) (gen-y)])
+     ;'()
      )
     ])
 
-(define [nearest-neighbors unclassified records k]
-  [let* ([sort-on-first (curryr sort< #:key first)]
-         [pt-dist-to-unclassified
-          (λ (pt) (cons [pt-dist unclassified (cdr pt)] pt))]
-         [map-dist-to-unclassified (curry map pt-dist-to-unclassified)]
-         [sorted-dist-to-unclassified (compose sort-on-first map-dist-to-unclassified)]
-         (nn-records [sorted-dist-to-unclassified records])
-         )
-    ; (writeln records)
-    ; (writeln k)
-    ; (writeln unclassified)
-    ; (writeln nn-records)
-    ; (writeln "")
-    (take nn-records k)
-    ]
+(define [nearest-neighbors records k]
+  (writeln records)
+  (writeln k)
+  (λ [unclassified]
+    [let* ([sort-on-first (curryr sort< #:key first)]
+           [pt-dist-to-unclassified
+            (λ (pt) (cons [pt-dist unclassified (cdr pt)] pt))]
+           [map-dist-to-unclassified (curry map pt-dist-to-unclassified)]
+           [sorted-dist-to-unclassified (compose sort-on-first map-dist-to-unclassified)]
+           [nn-records (sorted-dist-to-unclassified records)]
+           [knn (take nn-records k)]
+           )
+      (printf "~a -> ~a\n" unclassified knn)
+      knn
+      ]
+    )
   )
 
 (define [classify nns]
@@ -117,15 +106,19 @@
           (else (displayln "Classifying against all points....")
                 (hash-ref [hash-ref the-data 'csv] 'classify))
           ])
+       (nn [nearest-neighbors to-classify-against [k]])
 
-       (to-classify-data to-be-classified)
-       (to-classify-nns
-        [map (curryr nearest-neighbors to-classify-against [k]) to-classify-data])
+       (to-classify-nns [map nn to-be-classified])
        (to-classify-classified [map (compose penguin->color classify) to-classify-nns])
        (classified-points
         [map (λ (pt classification)
-               [points (list pt) #:sym 'full6star #:color classification #:size 25])
-             to-classify-data to-classify-classified])
+               ;  (points (list pt)
+               ;          #:sym 'full6star #:color classification #:size 25)
+               (point-label pt
+                            #:point-sym 'full6star #:point-color classification #:point-size 25
+                            #:size 7)
+               )
+             to-be-classified to-classify-classified])
        ]
 
   [plot (list adelie-points gentoo-points chinstrap-points classified-points centroid-points)
