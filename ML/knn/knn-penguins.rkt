@@ -39,7 +39,10 @@
         [chinstrap-data (map cdr [hash-ref (hash-ref the-data 'chinstrap) 'centroid])]
         )
     (list
-     [points adelie-data #:sym 'oasterisk #:color "red" #:size 20]
+     ;  [points adelie-data #:sym 'oasterisk #:color "red" #:size 20]
+     [point-label [car adelie-data]
+                  #:size 7
+                  #:point-sym 'oasterisk #:point-color "red" #:point-size 20]
      [points gentoo-data #:sym 'oasterisk #:color "green" #:size 20]
      [points chinstrap-data #:sym 'oasterisk #:color "blue" #:size 20]
      )
@@ -116,7 +119,7 @@
                ;          #:sym 'full6star #:color classification #:size 25)
                (point-label pt
                             #:point-sym 'full6star #:point-color classification #:point-size 25
-                            #:size 7)
+                            #:size 9)
                )
              to-be-classified to-classify-classified])
        ]
