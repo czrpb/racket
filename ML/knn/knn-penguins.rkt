@@ -22,10 +22,15 @@
 
 (define [penguin-points str sym color]
   [list
-   (points [map cdr (hash-refs the-data [list sym 'classify])]
-           #:label str #:sym 'fullcircle #:color color #:size 10)
+   (map [λ (pt)
+          (point-label pt #:size 7
+                       #:point-sym 'fullcircle #:point-color color #:point-size 10
+                       )]
+        [map cdr (hash-refs the-data [list sym 'classify])])
+   ;  (points [map cdr (hash-refs the-data [list sym 'classify])]
+   ;          #:label str #:sym 'fullcircle #:color color #:size 10)
    (points [map cdr (hash-refs the-data [list sym 'remaining])]
-           #:sym 'circle #:color color #:size 5)
+           #:label str #:sym 'circle #:color color #:size 5)
    ]
   )
 (define adelie-points [penguin-points "Adelie" 'adelie "red"])
@@ -39,12 +44,15 @@
         [chinstrap-data (map cdr [hash-ref (hash-ref the-data 'chinstrap) 'centroid])]
         )
     (list
-     ;  [points adelie-data #:sym 'oasterisk #:color "red" #:size 20]
      [point-label [car adelie-data]
                   #:size 7
                   #:point-sym 'oasterisk #:point-color "red" #:point-size 20]
-     [points gentoo-data #:sym 'oasterisk #:color "green" #:size 20]
-     [points chinstrap-data #:sym 'oasterisk #:color "blue" #:size 20]
+     [point-label [car gentoo-data]
+                  #:size 7
+                  #:point-sym 'oasterisk #:point-color "green" #:point-size 20]
+     [point-label [car chinstrap-data]
+                  #:size 7
+                  #:point-sym 'oasterisk #:point-color "blue" #:point-size 20]
      )
     ]
   )
@@ -80,7 +88,7 @@
   )
 
 (define [classify nns]
-  [cadaar(group-by second nns)]
+  [cadaar (sort [group-by second nns] > #:key length)]
   )
 
 (define [penguin->color p]
@@ -117,9 +125,8 @@
         [map (λ (pt classification)
                ;  (points (list pt)
                ;          #:sym 'full6star #:color classification #:size 25)
-               (point-label pt
-                            #:point-sym 'full6star #:point-color classification #:point-size 25
-                            #:size 9)
+               (point-label pt #:size 9
+                            #:point-sym 'full6star #:point-color classification #:point-size 25)
                )
              to-be-classified to-classify-classified])
        ]
