@@ -2,6 +2,7 @@
 
 (displayln "\nStarting ...\n")
 
+(require math/statistics)
 (require plot)
 (plot-new-window? #t)
 
@@ -64,7 +65,7 @@
          )
     (append
      (list [list (x) (y)] '[4175 45.9] '[2862 60])
-     (for/list [(_ [range 10])] [list (gen-x) (gen-y)])
+     (for/list [(_ [range 25])] [list (gen-x) (gen-y)])
      ;'()
      )
     ])
@@ -88,8 +89,23 @@
   )
 
 (define [classify nns]
-  [cadaar (sort [group-by second nns] > #:key length)]
-  )
+  [let* (
+         [reduced (map [curryr take 2] nns)]
+         [hashed (foldl [λ (p h) (hash-update h (second p) (curry cons [first p]) '())]
+                        [hash] reduced)]
+         [variances (for/list [([k v] hashed)] [list k (variance v)])]
+         [nonzero-variances (filter [compose (negate zero?) second] variances)]
+         [sorted (sort nonzero-variances < #:key second)]
+         [result (first sorted)]
+         )
+    (writeln reduced)
+    (writeln hashed)
+    (writeln variances)
+    (writeln nonzero-variances)
+    (writeln sorted)
+    (writeln "")
+    (first result)
+    ])
 
 (define [penguin->color p]
   [match p
