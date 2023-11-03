@@ -1,7 +1,7 @@
 #lang racket
 
-(require [only-in "get-cmdline.rkt" field-nums csv-file k2])
-(require [only-in "utils.rkt" sort< centroid])
+(require [only-in "get-cmdline.rkt" field-nums csv-file k2 centroid])
+(require [only-in "utils.rkt" sort< pts->centroid])
 
 (provide the-data x-min x-max y-min y-max)
 
@@ -57,9 +57,15 @@
                 ([penguin?] [compose (curry equal? penguin) car])
                 ([penguin-raw] [filter penguin? csv-data])
                 ([penguin-data] [sort (map cdr penguin-raw) < #:key car])
-                ([penguin-centroid] [list (cons penguin [centroid penguin-data])])
+                ([penguin-centroid] [list (cons penguin [pts->centroid penguin-data])])
                 ([penguin-classify penguin-remaining]
-                 [split-at (shuffle penguin-raw) (or [k2] [length penguin-raw])])
+                 ;[split-at (shuffle penguin-raw) (or [k2] [length penguin-raw])])
+                 [split-at (shuffle penguin-raw)
+                           (cond
+                             [(centroid) 0]
+                             [(k2) (k2)]
+                             [else (length penguin-raw)]
+                             )])
                 ]
     [hash 'classify penguin-classify 'remaining penguin-remaining 'centroid penguin-centroid]
     ; [hash 'classify (sort penguin-classify < #:key second) 'remaining penguin-remaining 'centroid penguin-centroid]

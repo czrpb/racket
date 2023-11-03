@@ -93,7 +93,7 @@
          [reduced (map [curryr take 2] nns)]
          [hashed (foldl [λ (p h) (hash-update h (second p) (curry cons [first p]) '())]
                         [hash] reduced)]
-         [variances (for/list [([k v] hashed)] [list k (variance v)])]
+         [variances (for/list [([k v] hashed)] [list k (if [= 1 (length v)] [car v] [variance v])])]
          [nonzero-variances (filter [compose (negate zero?) second] variances)]
          [sorted (sort nonzero-variances < #:key second)]
          [result (first sorted)]
@@ -119,7 +119,7 @@
        (to-classify-against
         [cond
           ([centroid] (displayln "Classifying against centroids....")
-                      (k 1)
+                      (k 3)
                       [append (hash-refs the-data '[adelie centroid])
                               (hash-refs the-data '[gentoo centroid])
                               (hash-refs the-data '[chinstrap centroid])])

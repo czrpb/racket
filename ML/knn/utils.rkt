@@ -1,7 +1,7 @@
 #lang racket
 
 (provide x-floor x-ceiling y-floor y-ceiling
-         sort< list-sample pt-dist centroid)
+         sort< list-sample pt-dist pts->centroid)
 
 (define sort< [curryr sort <])
 (define list-sample [λ (l n) (take [shuffle l] n)])
@@ -30,7 +30,7 @@
 
 (define pt-sum [curry map +])
 
-(define [centroid pts]
+(define [pts->centroid pts]
   [map (curryr / (length pts))
        (foldl pt-sum '(0.0 0.0) pts)
        ]
