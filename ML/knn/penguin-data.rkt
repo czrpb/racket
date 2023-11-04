@@ -59,7 +59,6 @@
                 ([penguin-data] [sort (map cdr penguin-raw) < #:key car])
                 ([penguin-centroid] [list (cons penguin [pts->centroid penguin-data])])
                 ([penguin-classify penguin-remaining]
-                 ;[split-at (shuffle penguin-raw) (or [k2] [length penguin-raw])])
                  [split-at (shuffle penguin-raw)
                            (cond
                              [(centroid) 0]
@@ -68,22 +67,12 @@
                              )])
                 ]
     [hash 'classify penguin-classify 'remaining penguin-remaining 'centroid penguin-centroid]
-    ; [hash 'classify (sort penguin-classify < #:key second) 'remaining penguin-remaining 'centroid penguin-centroid]
     )
   )
 
 (define adelie [penguin-hash "Adelie"])
 (define gentoo [penguin-hash "Gentoo"])
 (define chinstrap [penguin-hash "Chinstrap"])
-; [let*-values (
-;        ([adelie?] [compose (curry equal? "Adelie") car])
-;        ([adelie-raw] [filter adelie? csv-data])
-;        ([adelie-data] [sort (map cdr adelie-raw) < #:key car])
-;        ([adelie-centroid] [list (cons "Adelie" [centroid adelie-data])])
-;        ([adelie-classify adelie-remaining] [split-at (shuffle adelie-raw [k2])])
-;        )
-;   (hash 'classify adelie-classify 'remaining adelie-remaining 'centroid adelie-centroid)
-;   ])
 
 (define the-data
   [hash 'csv csv 'adelie adelie 'gentoo gentoo 'chinstrap chinstrap])
