@@ -93,7 +93,7 @@
          [reduced (map [curryr take 2] nns)]
          [hashed (foldl [λ (p h) (hash-update h (second p) (curry cons [first p]) '())]
                         [hash] reduced)]
-         [variances (for/list [([k v] hashed)] [list k (if [= 1 (length v)] [car v] [variance v])])]
+         [variances (for/list [([k v] hashed)] [list k (if [= 1 (length v)] [* 100 (car v)] [variance v])])]
          [nonzero-variances (filter [compose (negate zero?) second] variances)]
          [sorted (sort nonzero-variances < #:key second)]
          [result (first sorted)]
@@ -114,6 +114,8 @@
     ("Chinstrap" "blue")
     (_ "black")
     ])
+
+(define output-filename-id [format "~a-~a-~a" (k) (k2) (centroid)])
 
 (let* [
        (to-classify-against
@@ -154,7 +156,7 @@
         ]
 
   [plot-file (list adelie-points gentoo-points chinstrap-points classified-points centroid-points)
-             "penguins.png" 'png
+             (format "penguins-~a.png" output-filename-id) 'png
              #:width 1024 #:height 768
              #:x-min (x-min) #:x-max (x-max) #:x-label "Body Mass"
              #:y-min (y-min) #:y-max (y-max) #:y-label "Bill Length"
