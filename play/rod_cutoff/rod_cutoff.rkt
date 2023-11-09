@@ -14,13 +14,6 @@
             [l-new (filter-not min? l)]
             [l-updated (map -min l-new)]
             )
-       (writeln l)
-       (writeln acc)
-       (writeln min)
-       (writeln l-len)
-       (writeln l-new)
-       (writeln l-updated)
-       (displayln "\n")
        (rc l-updated [cons l-len acc])
        ]
      )
